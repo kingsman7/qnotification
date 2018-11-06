@@ -1,0 +1,25 @@
+{
+  "name": "@imagina/qnotification",
+  "version": "0.0.1",
+  "description": "Quasar Framework, Module to manage push notifications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imagina/qnotification.git"
+  },
+  "dependencies": {
+    "@imagina/qhelper": ">=0.0.14"
+  },
+  "author": "http://imaginacolombia.com/",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imagina/qnotification/issues"
+  },
+  "homepage": "https://github.com/imagina/qnotification#readme",
+  "keywords": [
+    "notification"
+  ]
+}
