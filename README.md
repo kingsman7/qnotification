@@ -4,6 +4,8 @@
 
 ####Plugins
 - helper
+- pusher
+- laravel echo
 
 ##Usage
 

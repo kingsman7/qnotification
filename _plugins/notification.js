@@ -1,5 +1,6 @@
-import {helper} from '@imagina/qhelper/_plugins/helper' //LocalForage
+import {helper} from '@imagina/qhelper/_plugins/helper'; //LocalForage
 import Echo from "laravel-echo";
+import store from 'src/store/index';
 import Pusher from "pusher-js";
 
 class Notification {
@@ -17,6 +18,21 @@ class Notification {
       .listen('.clearCache', (message) => {
         helper.clearCache(message["key"]);
       });
+  }
+  
+  pushNotification(msg,from,type,data){
+    
+    store.dispatch('notification/PUSH_NOTIFICATION',[{
+      message: msg,
+      from: from,
+      type: type,
+      data: data,
+      viewed: false
+    }]);
+  }
+  
+  flushNotification(type,id){
+  
   }
 }
 
