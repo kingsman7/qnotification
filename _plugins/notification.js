@@ -6,33 +6,21 @@ import Pusher from "pusher-js";
 class Notification {
   constructor() {
     this.Echo = new Echo({
-      broadcaster: env('BROADCAST_DRIVER','pusher'),
+      broadcaster: env('BROADCAST_DRIVER', 'pusher'),
       key: env('PUSHER_APP_KEY'),
       cluster: env('PUSHER_APP_CLUSTER'),
       encrypted: env('PUSHER_APP_ENCRYPTED'),
     });
   }
-  
-  global(){
+
+  global() {
     this.Echo.channel('global')
       .listen('.clearCache', (message) => {
         helper.clearCache(message["key"]);
+      })
+      .listen('.notification', (message) => {
+        store.dispatch('notification/GET_NOTIFICATIONS', [message.data]);
       });
-  }
-  
-  pushNotification(msg,from,type,data){
-    
-    store.dispatch('notification/PUSH_NOTIFICATION',[{
-      message: msg,
-      from: from,
-      type: type,
-      data: data,
-      viewed: false
-    }]);
-  }
-  
-  flushNotification(type,id){
-  
   }
 }
 
