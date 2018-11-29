@@ -10,38 +10,50 @@
       • CREATE
     </div>
 
-    <div id="formNotification" class="col-12 relative-position">
+    <div id="formNotification" class="col-12">
       <div class="form-title">
         Form Notification
       </div>
 
-      <div class="full-width row q-py-md">
+      <div class="full-width row q-py-md relative-position">
         <!--Platforms-->
         <div class="fields col-12 text-center">
           <span class="q-ma-none text-grey-6 q-subheading">
             <q-icon name="fas fa-sitemap" color="grey-7"></q-icon>
             Platforms*
           </span>
-
-          <q-option-group
-            inline class="q-mt-xs"
-            type="toggle"
-            color="secondary"
-            v-model="form.platforms"
-            :options="platforms"
-          />
+          <q-field
+            :error="$v.form.platforms.$error"
+            error-label="This field is required"
+          >
+            <q-option-group
+              inline class="q-mt-xs"
+              type="toggle"
+              color="secondary"
+              v-model="form.platforms"
+              :options="platforms"
+            />
+          </q-field>
         </div>
+
         <!--Message-->
         <div class="fields col-12 col-md-6 q-mt-md">
-          <q-input v-model="form.message"
-                   color="white"
-                   inverted-light
-                   class="no-shadow textarea"
-                   rows="4"
-                   type="textarea"
-                   placeholder="Message*">
-          </q-input>
+          <q-field
+            :error="$v.form.message.$error"
+            error-label="This field is required and min length"
+            :count="10"
+          >
+            <q-input v-model="form.message"
+                     color="white"
+                     inverted-light
+                     class="no-shadow textarea"
+                     rows="4"
+                     type="textarea"
+                     placeholder="Message*">
+            </q-input>
+          </q-field>
         </div>
+
         <!--Other Fields-->
         <div class="col-12 col-md-6">
           <!--Summary-->
@@ -63,16 +75,15 @@
         <!--== Select User to send notification ==-->
         <q-collapsible class="full-width" v-model="filterUsersContent"
                        header-style="display: none">
-          <filter-users></filter-users>
+          <search-users v-model="usersSelected" ref="searchUserComponent"></search-users>
         </q-collapsible>
 
         <!--== Buttons ==-->
         <div class="fields col-12">
           <q-toggle v-model="toAllUsers"
-                    @input="filterUsersContent = !filterUsersContent"
                     class="q-py-sm"
                     left-label
-                    label="To all users" />
+                    label="To all users"/>
 
           <q-btn :loading="btnLoading" color="primary"
                  @click="sendNotification()"
@@ -83,6 +94,11 @@
             </span>
           </q-btn>
         </div>
+
+        <!--Loading-->
+        <q-inner-loading :visible="loading">
+          <q-spinner-hourglass size="50px" color="primary"></q-spinner-hourglass>
+        </q-inner-loading>
       </div>
     </div>
   </div>
@@ -93,12 +109,20 @@
   import notificationService from '@imagina/qnotification/_services/notifications'
 
   /*Components*/
-  import filterUsers from 'src/components/users/filterUsers'
+  import searchUsers from '@imagina/quser/_components/search-users'
+
+  //plugins
+  import {required, email, numeric, minLength} from 'vuelidate/lib/validators'
+  import {alert} from '@imagina/qhelper/_plugins/alert'
 
   export default {
     props: {},
-    components: {filterUsers},
-    watch: {},
+    components: {searchUsers},
+    watch: {
+      toAllUsers(active){
+        this.filterUsersContent = active ? false : true
+      }
+    },
     mounted() {
       this.$nextTick(function () {
         this.getPlatforms()
@@ -106,12 +130,23 @@
     },
     data() {
       return {
+        //Data
         form: this.initForm(),
         platforms: [],
+        toAllUsers: true,
+        usersSelected: [],
+
         btnLoading: false,
-        toAllUsers: false,
-        filterUsersContent : true
+        filterUsersContent: false,
+        loading: true
       }
+    },
+    /*=== VALIDATIONS ===*/
+    validations: {
+      form: {
+        platforms: {required},
+        message: {required, minLength: minLength(10)}
+      },
     },
     methods: {
       //Return init form
@@ -122,7 +157,7 @@
             summary: '',
             url: ''
           },
-          message: '',
+          message: ''
         }
       },
       //Get platforms avaliables
@@ -136,17 +171,36 @@
                 label: item.platform,
                 value: item.id
               })
+              this.loading = false
             })
           }
         })
       },
       //Send notification
       sendNotification() {
-        this.btnLoading = true
-        notificationService.create(this.form).then(response => {
-          this.btnLoading = false
-          this.form = this.initForm()
-        })
+        this.$v.$touch();//validate all fields from form
+
+        if (!this.$v.$error) {
+          this.$v.$reset();
+          this.btnLoading = true
+
+          this.form.users = this.toAllUsers ? [] :
+            (this.usersSelected.usersId ? this.usersSelected.usersId : [])
+
+          notificationService.create(this.form).then(response => {
+            this.successNotification()
+          })
+        } else {
+          alert.error('Please review the fields again.', 'bottom');
+        }
+      },
+      //Reset form create notification
+      successNotification() {
+        this.form = this.initForm()
+        this.toAllUsers = true
+        this.$refs.searchUserComponent.reset()
+        alert.success('Notification sent', 'top')
+        this.btnLoading = false
       }
     }
   }

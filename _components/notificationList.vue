@@ -8,37 +8,90 @@
         </h1>
         <q-toggle v-model="filter.unread"
                   class="q-mt-md"
-                  label="Only Unread" />
+                  label="Only Unread"/>
       </q-layout-header>
 
       <q-page-container>
-        <!--Notifications-->
-        <q-item multiline :key="key" :class="!notification.viewedDate ? 'bg-grey-3' : ''"
-                v-if="!notification.viewedDate || (notification.viewedDate && !filter.unread)"
-                v-for="(notification,key) in this.$store.state.notification.notifications">
-          <!--img user-->
-          <q-item-side>
-            <q-item-tile avatar>
-              <img :src="notification.user.mainimage" :alt="notification.user.fullName"
-                   width="32px" style="border-radius: 100%">
-            </q-item-tile>
-          </q-item-side>
-          <!--Content Notification-->
-          <q-item-main
-            :label="notification.user.fullName"
-            label-lines="1"
-            :sublabel="notification.options.summary ? notification.options.summary : notification.message"
-            sublabel-lines="2"
-          />
-          <!-- Date notification -->
-          <q-item-side right>
-            <q-item-tile stamp>
-              {{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'short', $q.i18n.lang)}}
-              <br>
-              {{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'time', $q.i18n.lang)}}
-            </q-item-tile>
-          </q-item-side>
-        </q-item>
+        <q-tabs v-model="tabsModel" animated align="justify">
+
+          <!--= Tab list notifications =-->
+          <q-tab-pane name="list-notifications">
+            <!--Notifications-->
+            <q-list link no-border separator class="full-width">
+              <q-item multiline :key="key" :class="!notification.viewedDate ? 'bg-blue-1' : ''"
+                      @click.native="showNotification(notification)"
+                      v-if="!notification.viewedDate || (notification.viewedDate && !filter.unread)"
+                      v-for="(notification,key) in this.$store.state.notification.notifications.slice(0, 20)">
+                <!--img user-->
+                <q-item-side>
+                  <q-item-tile avatar>
+                    <img :src="notification.user.mainimage" :alt="notification.user.fullName"
+                         width="32px" style="border-radius: 100%">
+                  </q-item-tile>
+                </q-item-side>
+                <!--Content Notification-->
+                <q-item-main
+                  :label="notification.user.fullName"
+                  label-lines="1"
+                  :sublabel="notification.options.summary ? notification.options.summary : notification.message"
+                  sublabel-lines="1"
+                />
+                <!-- Date notification -->
+                <q-item-side right>
+                  <q-item-tile stamp>
+                    {{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'short', $q.i18n.lang)}}<br>
+                    {{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'time', $q.i18n.lang)}}
+                  </q-item-tile>
+                </q-item-side>
+              </q-item>
+            </q-list>
+            <!--Show all-->
+            <div class="text-center q-py-md">
+              <q-btn color="primary" :to="{name : 'notifications'}">
+                show all
+              </q-btn>
+            </div>
+          </q-tab-pane>
+
+          <!--= Tab show notification =-->
+          <q-tab-pane name="show-notification">
+            <!--Button to return list notifications-->
+            <q-btn icon="fas fa-arrow-left" label="Notifications"
+                   flat color="secondary" @click="tabsModel = 'list-notifications'">
+            </q-btn>
+            <!--Notification-->
+            <div v-if="notification" class="showNotification q-mt-md">
+              <!--User notification-->
+              <q-chip :avatar="notification.user.mainimage"
+                      color="teal-2" text-color="dark" small>
+                {{notification.user.fullName}}
+              </q-chip>
+
+              <!--Message-->
+              <div class="bg-white full-width q-pa-sm q-body-1 q-mt-md q-mb-lg">
+                <!--Message-->
+                <p>{{notification.message}}</p>
+                <!--Created At-->
+                <div class="q-caption text-grey-7">
+                  <span>
+                    {{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'short', $q.i18n.lang)}}
+                  </span>
+                  <span class="float-right">
+                    {{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'time', $q.i18n.lang)}}
+                  </span>
+                </div>
+              </div>
+
+              <!--Button URL-->
+              <div class="text-center">
+                <q-btn v-if="notification.options.url" label="Go"
+                       @click="goToNotificationURL(notification.options.url)"
+                       color="secondary" icon="fas fa-globe">
+                </q-btn>
+              </div>
+            </div>
+          </q-tab-pane>
+        </q-tabs>
       </q-page-container>
 
       <q-layout-footer id="footer" class="no-shadow bg-white">
@@ -57,7 +110,7 @@
 </template>
 <script>
   import {helper} from '@imagina/qhelper/_plugins/helper';
-  import notificationService from '@imagina/qnotification/_services/notifications'
+  import notificationServices from '@imagina/qnotification/_services/notifications'
 
   export default {
     props: {},
@@ -69,17 +122,49 @@
     },
     data() {
       return {
-        filter:{
-          unread : false
-        }
+        filter: {
+          unread: false
+        },
+        tabsModel: 'list-notifications',
+        notification : false,
       }
     },
-    methods: {}
-
+    methods: {
+      //Show notification
+      showNotification(data){
+        this.notification = data
+        this.tabsModel = 'show-notification'
+        this.updateNotification(data)
+      },
+      //Redirec to URL from notification
+      goToNotificationURL(url){
+        if(url)
+          if (!url.match(/^https?:\/\//i)) {
+            url = 'http://' + url;
+          }
+          window.open(url,'_blank')
+      },
+      //Update viewed at from notification
+      updateNotification(notification){
+        if(!notification.viewedDate){
+          this.$store.dispatch('notification/UPDATE_NOTIFICATION',{id : notification.id})
+        }
+      }
+    }
   }
 </script>
 <style lang="stylus">
   @import "~variables";
   #notificationList
-    //test
+    .q-tabs
+      .q-tabs-head
+        display none
+      .q-tabs-panes
+        .q-tab-pane
+          padding 0
+        .showNotification
+          padding 8px 16px
+    .q-list
+      padding 0
+
 </style>

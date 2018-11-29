@@ -18,8 +18,8 @@ class Notification {
       .listen('.clearCache', (message) => {
         helper.clearCache(message["key"]);
       })
-      .listen('.notification', (message) => {
-        store.dispatch('notification/GET_NOTIFICATIONS', [message.data]);
+      .listen('.notification'+store.state.auth.userId, (response) => {
+        store.commit('notification/PUSH_NOTIFICATION', response.data);
       });
   }
 }

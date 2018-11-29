@@ -10,7 +10,7 @@ import home from 'src/layouts/master'
 Route.view('/notifications', home)
   .guard(auth)
   .children(() => {
-      Route.view('/', require('../_layouts/create').default).name('notifications');
+      Route.view('/', require('../_layouts/notifications').default).name('notifications');
       Route.view('/create', require('../_layouts/create').default).name('notifications.create');
     }
   )
