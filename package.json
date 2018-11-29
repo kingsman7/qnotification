@@ -1,6 +1,6 @@
 {
-  "_from": "@imagina/qnotification@0.0.4",
-  "_id": "@imagina/qnotification@0.0.4",
+  "_from": "@imagina/qnotification@0.0.5",
+  "_id": "@imagina/qnotification@0.0.5",
   "_inBundle": false,
   "_integrity": "sha512-xUZpBdEkfZfkFq61Q/VAE4Ek6XA7/4NvkGfvtZSvrrVzBIknh0vL+0G2aLVzAu2jeQPhOk1r6QxqSqTQ7HCdAw==",
   "_location": "/@imagina/qnotification",
@@ -8,7 +8,7 @@
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "@imagina/qnotification@0.0.4",
+    "raw": "@imagina/qnotification@0.0.5",
     "name": "@imagina/qnotification",
     "escapedName": "@imagina%2fqnotification",
     "scope": "@imagina",
@@ -21,9 +21,9 @@
     "/",
     "/@imagina/qoffline"
   ],
-  "_resolved": "https://registry.npmjs.org/@imagina/qnotification/-/qnotification-0.0.4.tgz",
+  "_resolved": "https://registry.npmjs.org/@imagina/qnotification/-/qnotification-0.0.5.tgz",
   "_shasum": "ad01bc7b44b609b734d3e60612961932577b7603",
-  "_spec": "@imagina/qnotification@0.0.4",
+  "_spec": "@imagina/qnotification@0.0.5",
   "_where": "D:\\Imagina\\html\\Applications\\fhia_app",
   "author": {
     "name": "http://imaginacolombia.com/"
@@ -53,5 +53,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.0.4"
+  "version": "0.0.5"
 }
