@@ -11,7 +11,11 @@ Route.view('/notifications', home)
   .guard(auth)
   .children(() => {
       Route.view('/', require('../_layouts/notifications').default).name('notifications');
-      Route.view('/create', require('../_layouts/create').default).name('notifications.create');
+      Route.view('/create', require('../_layouts/create').default).options({
+        name:'notifications.create',
+        meta: {permission: 'fhia.roles.admin'},
+        guard: access
+      });
     }
   )
 

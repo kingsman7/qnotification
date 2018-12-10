@@ -100,7 +100,7 @@
         </q-btn>
         <q-btn flat class="float-right"
                :to="{name : 'notifications.create'}"
-               color="primary">
+               color="primary" v-if="hasAccess">
           <q-icon class="q-mr-sm" name="fas fa-location-arrow"></q-icon>
           Send
         </q-btn>
@@ -111,6 +111,7 @@
 <script>
   import {helper} from '@imagina/qhelper/_plugins/helper';
   import notificationServices from '@imagina/qnotification/_services/notifications'
+  import auth from '@imagina/quser/_plugins/auth' //Middleware auth
 
   export default {
     props: {},
@@ -118,6 +119,9 @@
     watch: {},
     mounted() {
       this.$nextTick(function () {
+        auth.hasAccess('fhia.roles.admin').then(can => {
+          this.hasAccess = can
+        })
       })
     },
     data() {
@@ -127,6 +131,7 @@
         },
         tabsModel: 'list-notifications',
         notification : false,
+        hasAccess : false,
       }
     },
     methods: {

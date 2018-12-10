@@ -12,40 +12,72 @@
 
     <div class="col-12">
       <div class="full-width row relative-position">
-        <q-infinite-scroll :handler="getNotifications" inline ref="infiniteScrollUsers"
-                           style="height: 470px; overflow-y: scroll; width: 100%">
+        <!--Empty notifications-->
+        <div class="full-width" v-if="!$store.state.notification.notifications.length">
+          <empty-component></empty-component>
+        </div>
+
+        <!--Notifications-->
+        <q-scroll-area style="height: 470px; width: 100%" v-else>
           <q-list no-border separator class="full-width">
             <!-- collapsible to hide sub-level menu entries -->
             <q-collapsible :label="notification.user.fullName" :avatar="notification.user.mainimage"
                            :key="key" @click.native="updateNotification(notification,key)"
-                           :class="!notification.viewedDate ? 'bg-blue-1' : 'bg-grey-2'"
+                           :class="!notification.viewedDate ? 'bg-blue-1' : ''"
                            :sublabel="$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'long', $q.i18n.lang)"
-                           v-for="(notification,key) in notifications">
-              <div class="q-subheading-1 mesageNotification">
-                {{notification.message}}
-                <br>
-                <q-btn v-if="notification.options.url" label="Go"
-                       @click="goToNotificationURL(notification.options.url)"
-                       color="secondary" icon="fas fa-globe" class="q-mt-md">
-                </q-btn>
+                           v-for="(notification,key) in $store.state.notification.notifications">
+              <div class="q-subheading-1 mesageNotification bg-grey-2">
+                <!--User notification-->
+                <q-chip :avatar="notification.user.mainimage"
+                        color="teal-2" text-color="dark" small>
+                  {{notification.user.fullName}}
+                </q-chip>
+
+                <!--Message-->
+                <div class="bg-white full-width q-pa-sm q-body-1 q-my-md">
+                  <!--Message-->
+                  <p>{{notification.message}}</p>
+                  <!--Created At-->
+                  <div class="q-caption text-grey-7">
+                  <span>
+                    {{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'short', $q.i18n.lang)}}
+                  </span>
+                    <span class="float-right">
+                    {{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'time', $q.i18n.lang)}}
+                  </span>
+                  </div>
+                </div>
+
+                <!--Button URL-->
+                <div class="text-center">
+                  <q-btn v-if="notification.options.url" label="Go"
+                         @click="goToNotificationURL(notification.options.url)"
+                         color="secondary" icon="fas fa-globe">
+                  </q-btn>
+                </div>
               </div>
             </q-collapsible>
           </q-list>
 
-          <div slot="message" class="text-center">
-            <q-spinner-dots color="primary" :size="40"></q-spinner-dots>
+          <div class="text-center q-py-md" v-if="$store.state.notification.page">
+            <q-btn label="Show more" color="primary"
+                   @click="getNotifications()" v-if="!loading">
+            </q-btn>
+
+            <q-spinner-dots color="primary" size="40" v-if="loading"/>
           </div>
-        </q-infinite-scroll>
+        </q-scroll-area>
       </div>
     </div>
   </div>
 </template>
 <script>
   import notificationService from '@imagina/qnotification/_services/notifications'
+  import emptyComponent from 'src/components/empty'
 
   export default {
     props: {},
-    components: {},
+    components: {emptyComponent},
     watch: {},
     mounted() {
       this.$nextTick(function () {
@@ -53,45 +85,36 @@
     },
     data() {
       return {
-        notifications : [],
-        page: 0,
+        page: 2,
+        loading: false,
+        notificationsRead: []
       }
     },
     methods: {
       //Get users with infinite scroll
-      getNotifications(page, done) {
-        if (page > this.page) {
-          this.page = page //update current page infinite scroll
-
-          //Request Notifications
-          notificationService.index({},20,page).then(response => {
-            let notifications = response.data.notifications
-            setTimeout(() => {
-              if (notifications.length) {//Load data
-                this.notifications = this.notifications.concat(notifications)
-                done()
-              } else {//Stop infinite scroll
-                this.$refs.infiniteScrollUsers.stop()
-              }
-            }, 500)
-          })
-        }
+      getNotifications() {
+        this.loading = true
+        //Request Notifications
+        this.$store.dispatch('notification/GET_NOTIFICATIONS').then(response => {
+          this.loading = false
+        })
       },
       //Redirec to URL from notification
-      goToNotificationURL(url){
-        if(url)
+      goToNotificationURL(url) {
+        if (url)
           if (!url.match(/^https?:\/\//i)) {
             url = 'http://' + url;
           }
-        window.open(url,'_blank')
+        window.open(url, '_blank')
       },
       //Update viewed at from notification
-      updateNotification(notification,key){
-        if(!notification.viewedDate){
-          this.$store.dispatch('notification/UPDATE_NOTIFICATION',{id : notification.id})
+      updateNotification(notification, key) {
+        if (this.notificationsRead.indexOf(notification.id) < 0) {
+          this.notificationsRead.push(notification.id)
+          if (!notification.viewedDate) {
+            this.$store.dispatch('notification/UPDATE_NOTIFICATION', {id: notification.id})
+          }
         }
-
-        this.notifications[key].viewedDate = true
       }
     }
   }
@@ -103,7 +126,7 @@
       padding 0
     .q-collapsible-sub-item
       background white
+      padding 8px 0 8px 35px
       .mesageNotification
-        padding 8px 0
-        padding-left 45px
+        padding 15px
 </style>
