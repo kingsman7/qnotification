@@ -2,6 +2,7 @@ import {helper} from '@imagina/qhelper/_plugins/helper'; //LocalForage
 import Echo from "laravel-echo";
 import store from 'src/store/index';
 import Pusher from "pusher-js";
+import {alert} from '@imagina/qhelper/_plugins/alert'
 
 class Notification {
   constructor() {
@@ -23,12 +24,22 @@ class Notification {
       })
       .listen('.report'+store.state.auth.userId, (response) => {
         let data = response.data
-        let dataReport = {
-          isGenerating: false,
-          isAvailable: true,
-          url: data.url,
+        
+        if(store.getters['report/isGeneratingReport'](data.reportName)){
+          let storeData = {
+            report: data.reportName,
+            state:{
+              isGenerating: false,
+              isAvailable: true,
+              generatedAt : store.getters['report/generatedAt'](data.reportName),
+              isRunTimeOut: false,
+              url: data.url,
+            }
+          }
+          store.dispatch('report/SET_REPORT_DATA', storeData)
+          alert.success('Report: ' + helper.convertStringToSnakeCase(data.reportName) + ', is available', 'bottom')
         }
-        store.dispatch('report/SET_REPORT_DATA', data.report, dataReport)
+        
       });
   }
 }
