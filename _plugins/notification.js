@@ -20,6 +20,15 @@ class Notification {
       })
       .listen('.notification'+store.state.auth.userId, (response) => {
         store.commit('notification/PUSH_NOTIFICATION', response.data);
+      })
+      .listen('.report'+store.state.auth.userId, (response) => {
+        let data = response.data
+        let dataReport = {
+          isGenerating: false,
+          isAvailable: true,
+          url: data.url,
+        }
+        store.dispatch('report/SET_REPORT_DATA', data.report, dataReport)
       });
   }
 }
