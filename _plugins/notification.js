@@ -33,11 +33,11 @@ class Notification {
               isAvailable: true,
               generatedAt : store.getters['report/generatedAt'](data.reportName),
               isRunTimeOut: false,
-              url: data.url,
+              reportTitle: data.reportTitle,
             }
           }
           store.dispatch('report/SET_REPORT_DATA', storeData)
-          alert.success('Report: ' + helper.convertStringToSnakeCase(data.reportName) + ', is available', 'bottom')
+          alert.success('Report: ' + data.reportTitle + ', is available', 'top')
         }
         
       });

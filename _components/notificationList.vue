@@ -119,9 +119,7 @@
     watch: {},
     mounted() {
       this.$nextTick(function () {
-        auth.hasAccess('fhia.roles.admin').then(can => {
-          this.hasAccess = can
-        })
+        this.hasAccess = auth.hasAccess('fhia.roles.admin')
       })
     },
     data() {
