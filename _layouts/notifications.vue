@@ -1,16 +1,12 @@
 <template>
   <div id="pageNotifications"
-       class="q-layout-page row layout-padding">
+       class="q-layout-page row layout-padding q-container">
 
-    <div class="text_title text-blue-9 col-xs-12 q-title text-right">
-      <span>NOTIFICATIONS</span>
+    <div class="text-title-border text-blue-9 col-xs-12 q-title text-right">
+      <span>My notifications</span>
     </div>
 
-    <div class="q-py-md q-title col-xs-12 text-negative">
-      • YOUR NOTIFICATIONS
-    </div>
-
-    <div class="col-12">
+    <div class="col-12 q-mt-lg q-box">
       <div class="full-width row relative-position">
         <!--Empty notifications-->
         <div class="full-width" v-if="!$store.state.notification.notifications.length">
@@ -101,11 +97,12 @@
       },
       //Redirec to URL from notification
       goToNotificationURL(url) {
-        if (url)
+        /*if (url)
           if (!url.match(/^https?:\/\//i)) {
             url = 'http://' + url;
           }
-        window.open(url, '_blank')
+        window.open(url, '_blank')*/
+        document.location.href = url;
       },
       //Update viewed at from notification
       updateNotification(notification, key) {

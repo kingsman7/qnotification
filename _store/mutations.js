@@ -1,6 +1,7 @@
 //Add data to state notifications
 export const PUSH_NOTIFICATIONS = (state, data) => {
-  state.notifications = state.notifications.concat(data.notifications);
+  //state.notifications = state.notifications.concat(data.notifications);
+  state.notifications = data.notifications;
   state.total = data.total;
   state.news = data.news;
   state.page = data.notifications.length ? (state.page+1) : false
