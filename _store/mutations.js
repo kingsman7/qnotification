@@ -9,9 +9,12 @@ export const PUSH_NOTIFICATIONS = (state, data) => {
 
 //Add new notification
 export const PUSH_NOTIFICATION = (state, notification) => {
-  state.notifications.unshift(notification)
-  state.news++
-  state.total++
+  let exist = state.notifications.find((ntf) => ntf.id == notification.id)
+  if(!exist){
+    state.notifications.unshift(notification)
+    state.news++
+    state.total++ 
+  }
 }
 
 //Change status viewed to notification
