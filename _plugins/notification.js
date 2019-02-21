@@ -25,20 +25,29 @@ class Notification {
       .listen('.report'+store.state.auth.userId, (response) => {
         let data = response.data
         
-        if(store.getters['report/isGeneratingReport'](data.reportName)){
-          let storeData = {
-            report: data.reportName,
-            state:{
-              isGenerating: false,
-              isAvailable: true,
-              generatedAt : store.getters['report/generatedAt'](data.reportName),
-              isRunTimeOut: false,
-              reportTitle: data.reportTitle,
+        // server failed
+
+          if(store.getters['report/isGeneratingReport'](data.reportName)){
+            let storeData = {
+              report: data.reportName,
+              state:{
+                isGenerating: false,
+                isAvailable: data.failed ? false : true,
+                generatedAt : data.failed ? false : store.getters['report/generatedAt'](data.reportName),
+                isRunTimeOut: false,
+                failed: data.failed ? data.failed : false,
+                reportTitle: data.failed ? '' : data.reportTitle,
+              }
             }
+            store.dispatch('report/SET_REPORT_DATA', storeData)
+            
+            if(!data.failed)
+              alert.success('Report: ' + data.reportTitle + ', is available', 'top')
+            else
+              alert.error('Report: ' + helper.convertStringToSnakeCase(data.reportName) + ', failed', 'bottom')
           }
-          store.dispatch('report/SET_REPORT_DATA', storeData)
-          alert.success('Report: ' + data.reportTitle + ', is available', 'top')
-        }
+        
+        
         
       });
   }
