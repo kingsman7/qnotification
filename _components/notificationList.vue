@@ -17,8 +17,9 @@
 					<!--= Tab list notifications =-->
 					<q-tab-pane name="list-notifications">
 						<!--Notifications-->
-						<q-list link no-border separator class="full-width">
-							<q-item multiline :key="key" :class="!notification.viewedDate ? 'bg-blue-1' : ''"
+						<q-list link no-border separator class="full-width"
+								v-if="this.$store.state.notification.notifications.length >= 1">
+							<q-item multiline :key="key" :class="!notification.viewedDate ? 'unread' : ''"
 							        @click.native="showNotification(notification)"
 							        v-if="!notification.viewedDate || (notification.viewedDate && !filter.unread)"
 							        v-for="(notification,key) in this.$store.state.notification.notifications.slice(0, 20)">
@@ -39,17 +40,20 @@
 								<!-- Date notification -->
 								<q-item-side right>
 									<q-item-tile stamp>
-										{{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'short', $q.i18n.lang)}}<br>
-										{{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'time', $q.i18n.lang)}}
+										{{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'short', $q.i18n.lang)}}
+										<div class="q-mt-sm">
+											<q-icon name="fas fa-exclamation-circle" color="primary" v-if="!notification.viewedDate"></q-icon>
+											{{$d($moment(notification.date, 'YYYY-MM-DD HH:mm').toDate(), 'time', $q.i18n.lang)}}
+										</div>
 									</q-item-tile>
 								</q-item-side>
 							</q-item>
 						</q-list>
-						<!--Show all-->
-						<div class="text-center q-py-md">
-							<q-btn color="primary" :to="{name : 'notifications'}">
-								show all
-							</q-btn>
+						<!--Empty notifications Box-->
+						<div v-else class="text-center text-grey-6 q-mt-md q-px-md">
+							<div class="q-box bg-white q-py-sm">
+								There are no notifications...
+							</div>
 						</div>
 					</q-tab-pane>
 
@@ -63,7 +67,7 @@
 						<div v-if="notification" class="showNotification q-mt-md">
 							<!--User notification-->
 							<q-chip :avatar="getmainimage(notification.user)"
-							        color="teal-2" text-color="dark" small>
+							        color="teal" text-color="white" small>
 								{{notification.user.fullName}}
 							</q-chip>
 
@@ -95,7 +99,8 @@
 			</q-page-container>
 
 			<q-layout-footer id="footer" class="no-shadow bg-white">
-				<q-btn flat color="primary" :to="{name : 'notifications'}">
+				<q-btn flat color="primary"
+				       :to="{name : 'notifications'}">
 					show all
 				</q-btn>
 				<q-btn flat class="float-right"
@@ -132,6 +137,7 @@
 				hasAccess: false,
 			}
 		},
+
 		methods: {
 			//Return path mainimage
 			getmainimage(user){
@@ -176,5 +182,10 @@
 
 		.q-list
 			padding 0
+			.unread
+				border-left 2px solid $primary !important
+				background white !important
+				.q-item-avatar
+					border 2px solid $primary !important
 
 </style>
