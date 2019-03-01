@@ -24,7 +24,6 @@ class Notification {
       })
       .listen('.report'+store.state.auth.userId, (response) => {
         let data = response.data
-        
         // server failed
           if(store.getters['report/isGeneratingReport'](data.reportId ? data.reportId : data.reportName)){
             let storeData = {
@@ -32,7 +31,7 @@ class Notification {
               id: data.reportId ? data.reportId : data.reportName,
               isGenerating: false,
               isAvailable: data.failed ? false : true,
-              generatedAt:  data.failed ? false : store.getters['report/generatedAt'](data.reportName),
+              generatedAt:  data.failed ? false : data.generatedAt,
               failed: data.failed ? data.failed : false,
               reportTitle: data.failed ? '' : data.reportTitle,
               reportName: data.reportName
