@@ -94,9 +94,12 @@
 					</q-btn>
 				</div>
 
-				<!--Loading-->
+				<!--Inner loading-->
 				<q-inner-loading :visible="loading">
-					<q-spinner-hourglass size="50px" color="primary"></q-spinner-hourglass>
+					<div class="q-box-inner-loading">
+						<q-spinner-hourglass size="50px" color="primary"/>
+						<h6 class="q-ma-none text-primary q-title">Loading...</h6>
+					</div>
 				</q-inner-loading>
 			</div>
 		</div>
