@@ -14,16 +14,20 @@ class Notification {
     });
   }
 
-  global() {
+  global(user) {
+    console.log('Echo:',this.Echo.channel('global'))
+    let userId = store.state.auth.userData.id
+    console.warn(userId)
     this.Echo.channel('global')
       .listen('.clearCache', (message) => {
         helper.clearCache(message["key"]);
       })
-      .listen('.notification'+store.state.auth.userId, (response) => {
+      .listen('.notification'+userId, (response) => {
         store.commit('notification/PUSH_NOTIFICATION', response.data);
       })
-      .listen('.report'+store.state.auth.userId, (response) => {
+      .listen('.report'+userId, (response) => {
         let data = response.data
+        console.warn(response,store.state.auth.userId)
         // server failed
           if(store.getters['report/isGeneratingReport'](data.reportId ? data.reportId : data.reportName)){
             let storeData = {
@@ -47,6 +51,11 @@ class Notification {
         
         
       });
+  }
+
+  leave(){
+    this.Echo.leave('global')
+    console.warn('Leave Echo')
   }
 }
 
