@@ -15,9 +15,10 @@ class Notification {
   }
 
   global(user) {
-    console.log('Echo:',this.Echo.channel('global'))
+    this.Echo.leave('global')
+
     let userId = store.state.auth.userData.id
-    console.warn(userId)
+
     this.Echo.channel('global')
       .listen('.clearCache', (message) => {
         helper.clearCache(message["key"]);
@@ -27,7 +28,6 @@ class Notification {
       })
       .listen('.report'+userId, (response) => {
         let data = response.data
-        console.warn(response,store.state.auth.userId)
         // server failed
           if(store.getters['report/isGeneratingReport'](data.reportId ? data.reportId : data.reportName)){
             let storeData = {
@@ -55,7 +55,6 @@ class Notification {
 
   leave(){
     this.Echo.leave('global')
-    console.warn('Leave Echo')
   }
 }
 
