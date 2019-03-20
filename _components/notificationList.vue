@@ -124,7 +124,7 @@
 		watch: {},
 		mounted() {
 			this.$nextTick(function () {
-				this.hasAccess = auth.hasAccess('fhia.roles.admin')
+				this.hasAccess = auth.hasAccess('inotification.notifications.create')
 			})
 		},
 		data() {
