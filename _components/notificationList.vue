@@ -100,7 +100,7 @@
 
 			<q-layout-footer id="footer" class="no-shadow bg-white">
 				<q-btn flat color="primary"
-				       :to="{name : 'notifications'}">
+				       :to="{name : 'notifications.index'}">
 					show all
 				</q-btn>
 				<q-btn flat class="float-right"
@@ -141,7 +141,7 @@
 		methods: {
 			//Return path mainimage
 			getmainimage(user){
-				return config('api.base_url') + '/' + user.mainImage
+				return config('apirRoutes.api.base_url') + '/' + user.mainImage
 			},
 			//Show notification
 			showNotification(data) {

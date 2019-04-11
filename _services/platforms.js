@@ -5,7 +5,7 @@ import {remember} from '@imagina/qhelper/_plugins/remember'
 export default {
   index(){
     return new Promise((resolve, reject) => {
-      http.get(config('api.api_url') + '/notification/platforms')
+      http.get(config('apirRoutes.api.api_url') + '/notification/platforms')
         .then(response => {
           resolve(response.data);
         })
