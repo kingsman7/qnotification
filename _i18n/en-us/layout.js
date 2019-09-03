@@ -2,6 +2,7 @@ export default {
   newNotification : 'New Notification',
   updateNotification : 'Update Notification',
   form : {
+    subtitle: 'Sub Title',
     userId: 'User',
     type: 'Type',
     message: 'Message',
