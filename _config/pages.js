@@ -8,7 +8,7 @@ export default {
 		permission: null,
 		activated: true,
 		path: '/notifications',
-		name: 'notifications.index',
+		name: 'index',
 		layout: require('@imagina/qnotification/_layouts/notifications').default,
 		containerLayout: master,
 		title: 'Notifications',
