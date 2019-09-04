@@ -100,7 +100,7 @@
 
 			<q-layout-footer id="footer" class="no-shadow bg-white">
 				<q-btn flat color="primary"
-				       :to="{name : 'notifications.index'}">
+				       :to="{name : 'index'}">
 					show all
 				</q-btn>
 				<q-btn flat class="float-right"
