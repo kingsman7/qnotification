@@ -13,64 +13,68 @@
     rounded
     class="q-mr-lg"
     icon="notifications">
-    <q-scroll-area
-      style="width: 400px;height:200px;">
-    <q-list separator class="q-pr-sm">
-      <div v-if="notifications.data.length">
-        <q-item
-          v-for="(notification, index) in notifications.data"
-          :key="index">
-          <q-item-side
-            color="info"
-            :icon="notification.icon_class" />
-          <q-item-main
-            :label="notification.title"
-            :sublabel="notification.message"/>
-          <q-item-side
-            right
-            :stamp="notification.timeAgo" />
-          <q-item-side right >
-            <q-btn
-              inverted
-              color="primary"
-              outline
-              dense
-              flat
-              round
-              @click="$router.push({name: notification.link})"
-              size="10px"
-              icon="fas fa-external-link-alt"/>
-          </q-item-side>
-          <q-item-side right >
-            <q-btn
-              inverted
-              color="primary"
-              outline
-              flat
-              dense
-              round
-              @click="updateNotification(notification)"
-              size="15px"
-              icon="far fa-times-circle"/>
-          </q-item-side>
-        </q-item>
+    <q-infinite-scroll :handler="loadMore">
+    
+      <q-list separator class="q-pr-sm">
+        <div v-if="notifications.data.length">
+          <q-item
+            v-for="(notification, index) in notifications.data"
+            :key="index">
+            <q-item-side
+              color="info"
+              :icon="notification.icon_class" />
+            <q-item-main
+              :label="notification.title"
+              :sublabel="notification.message"/>
+            <q-item-side
+              right
+              :stamp="notification.timeAgo" />
+            <q-item-side right >
+              <q-btn
+                inverted
+                color="primary"
+                outline
+                dense
+                flat
+                round
+                @click="$router.push({name: notification.link})"
+                size="10px"
+                icon="fas fa-external-link-alt"/>
+            </q-item-side>
+            <q-item-side right >
+              <q-btn
+                inverted
+                color="primary"
+                outline
+                flat
+                dense
+                round
+                @click="updateNotification(notification)"
+                size="15px"
+                icon="far fa-times-circle"/>
+            </q-item-side>
+          </q-item>
+        </div>
+        <div v-else>
+          <q-item>
+            <q-item-side></q-item-side>
+            <q-item-main>
+              There are no notifications
+            </q-item-main>
+          </q-item>
+          <q-item>
+            <q-item-side></q-item-side>
+            <q-item-main>
+              <q-btn label="view All" class="full-width"></q-btn>
+            </q-item-main>
+          </q-item>
+        </div>
+      </q-list>
+      
+      <div class="row justify-center" v-if="loading">
+        <q-spinner-dots slot="message" :size="40" />
       </div>
-      <div v-else>
-        <q-item>
-          <q-item-side></q-item-side>
-          <q-item-main>
-            There are no notifications
-          </q-item-main>
-        </q-item>
-        <q-item>
-          <q-item-side></q-item-side>
-          <q-item-main>
-            <q-btn label="view All" class="full-width"></q-btn>
-          </q-item-main>
-        </q-item>
-      </div>
-    </q-list>
-    </q-scroll-area>
+    </q-infinite-scroll>
   </q-btn-dropdown>
 </div>
 </template>
@@ -88,6 +92,7 @@
             page: 1,
             take: 10,
             total: 0,
+            lastPage:0,
           }
         },
         echo: null
@@ -110,7 +115,8 @@
         let params ={
           params: {
             filter: {
-              me: true
+              me: true,
+              read: false,
             },
             page: this.notifications.pagination.page,
             take: this.notifications.pagination.take
@@ -118,8 +124,11 @@
         }
         this.$crud.index('apiRoutes.qnotification.notifications', params)
           .then( response => {
-            this.notifications.data = response.data
+            response.data.forEach( item => {
+              this.notifications.data.push(item)
+            })
             this.notifications.pagination.total = response.meta.page.total
+            this.notifications.pagination.lastPage = response.meta.page.lastPage
             this.loading = false
           })
           .catch( error => {
@@ -128,12 +137,15 @@
           })
       },
       updateNotification(notification){
-        notification.isReas = true
+        notification.isRead= true
         this.loading = true
         let params = {params: {}}
         this.$crud.update('apiRoutes.qnotification.notifications', notification.id, notification, params)
           .then( response => {
-            // Update notification in Local data
+            
+            let indexOfNotificationUpdated = this.notifications.data.indexOf( notification )
+            this.notifications.data.splice( indexOfNotificationUpdated, 1 )
+            
             this.notifications.pagination.total --
             this.loading = false
           })
@@ -142,6 +154,16 @@
             this.$alert.error({message: this.$tr('ui.message.formInvalid'), pos: 'bottom'})
             this.loading = false
           })
+      },
+      loadMore(index, done){
+        if (this.notifications.pagination.page <= this.notifications.pagination.lastPage){
+          console.warn(this.notifications.pagination.page, this.notifications.pagination.lastPage)
+          setTimeout(() => {
+            this.notifications.pagination.page ++
+            this.getNotifications()
+            done()
+          }, 3500)
+        }
       },
       initPusher(){
         this.echo = new Echo({
