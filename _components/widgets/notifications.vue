@@ -13,9 +13,19 @@
     rounded
     class="q-mr-lg"
     icon="notifications">
-    <q-infinite-scroll :handler="loadMore">
-    
-      <q-list separator class="q-pr-sm">
+    <q-infinite-scroll :handler="loadMore" style="min-height: 100px; ">
+      <q-list  class="q-pr-sm">
+        <q-list-header>
+          <q-item-main>
+            <q-btn
+              :to="{name: 'qnotification.admin.notifications.index'}"
+              dense
+              flat
+              color="primary"
+              :label="$tr('qnotification.layout.allNotifications')"
+              class="full-width"/>
+          </q-item-main>
+        </q-list-header>
         <div v-if="notifications.data.length">
           <q-item
             v-for="(notification, index) in notifications.data"
@@ -55,24 +65,22 @@
             </q-item-side>
           </q-item>
         </div>
-        <div v-else>
+        <div v-else class="row justify-center">
           <q-item>
             <q-item-side></q-item-side>
             <q-item-main>
-              There are no notifications
-            </q-item-main>
-          </q-item>
-          <q-item>
-            <q-item-side></q-item-side>
-            <q-item-main>
-              <q-btn label="view All" class="full-width"></q-btn>
+              {{$tr('qnotification.layout.thereAreNoNotifications')}}
             </q-item-main>
           </q-item>
         </div>
       </q-list>
-      
-      <div class="row justify-center" v-if="loading">
-        <q-spinner-dots slot="message" :size="40" />
+      <div
+        class="row justify-center"
+        v-if="this.notifications.pagination.page <= this.notifications.pagination.lastPage">
+        <q-spinner-dots
+          color="primary"
+          slot="message"
+          :size="40"/>
       </div>
     </q-infinite-scroll>
   </q-btn-dropdown>
@@ -157,7 +165,6 @@
       },
       loadMore(index, done){
         if (this.notifications.pagination.page <= this.notifications.pagination.lastPage){
-          console.warn(this.notifications.pagination.page, this.notifications.pagination.lastPage)
           setTimeout(() => {
             this.notifications.pagination.page ++
             this.getNotifications()
