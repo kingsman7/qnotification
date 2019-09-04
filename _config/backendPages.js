@@ -12,7 +12,7 @@ export default {
     permission: null,
     activated: true,
     path: '/notifications',
-    name: 'index',
+    name: 'qnotification.admin.notifications.index',
     layout: require('@imagina/qnotification/_layouts/admin/notifications/index').default,
     containerLayout: master,
     title: 'qnotification.sidebar.adminNotifications',
