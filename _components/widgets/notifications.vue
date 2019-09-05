@@ -13,7 +13,7 @@
     rounded
     class="q-mr-lg"
     icon="notifications">
-    <q-infinite-scroll :handler="loadMore" style="min-height: 100px; ">
+    <q-infinite-scroll :handler="loadMore" style="min-height: 100px;">
       <q-list  class="q-pr-sm">
         <q-list-header>
           <q-item-main>
@@ -103,6 +103,7 @@
             lastPage:0,
           }
         },
+        permissionForNotification: false,
         echo: null
       }
     },
@@ -115,6 +116,7 @@
       this.$nextTick(()=> {
         this.getNotifications()
         this.initPusher()
+        this.checkPermissionForNotification()
       })
     },
     methods: {
@@ -183,12 +185,33 @@
           .listen(`.notification.new`, data => {
             this.notifications.data.unshift(data)
             this.notifications.pagination.total ++
+            this.showPushNotitication(data)
           })
           .listen(`.notification.new.${this.$store.state.quserAuth.userData.id}`, data => {
             this.notifications.data.unshift(data)
             this.notifications.pagination.total ++
+            this.showPushNotitication(data)
           })
       },
+      checkPermissionForNotification(){
+        window.Notification.requestPermission().then( response => {
+          if (response === 'granted'){
+            this.permissionForNotification = true
+          }
+        })
+      },
+      showPushNotitication(data){
+        if (this.permissionForNotification){
+          console.warn(data)
+          navigator.serviceWorker.ready.then( registration => {
+            let sn = registration.showNotification(data.name, {
+              body: data.message,
+              icon: '',
+              click_action: ''
+            })
+          })
+        }
+      }
     }
   }
 </script>
