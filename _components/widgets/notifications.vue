@@ -5,11 +5,11 @@
       round
       text-color="black"
       color="white"
-      floating>{{notifications.pagination.total}}</q-chip>
+      floating>{{animatedNumber}}</q-chip>
   </div>
   <q-btn-dropdown
     dense
-    outline
+    flat
     rounded
     class="q-mr-lg"
     icon="notifications">
@@ -104,13 +104,34 @@
           }
         },
         permissionForNotification: false,
-        echo: null
+        echo: null,
+        tweenedNumber: 0,
+        focused: true,
       }
     },
     computed:{
       unreadNotifications (){
         return 0
+      },
+      animatedNumber: function() {
+        return this.tweenedNumber.toFixed(0);
+      },
+      focusWindow(){
+        window.onfocus = function() {
+          this.focused = true;
+          console.log(this.focused)
+        };
+        window.onblur = function() {
+          this.focused = false;
+          console.log(this.focused)
+        };
+        return this.focused
       }
+    },
+    watch: {
+      'notifications.pagination.total': function(newValue) {
+        TweenLite.to(this.$data, 0.5, { tweenedNumber: newValue });
+      },
     },
     created() {
       this.$nextTick(()=> {
@@ -171,7 +192,7 @@
             this.notifications.pagination.page ++
             this.getNotifications()
             done()
-          }, 3500)
+          }, 2500)
         }
       },
       initPusher(){
@@ -181,7 +202,7 @@
           cluster: env('PUSHER_APP_CLUSTER'),
           encrypted: env('PUSHER_APP_ENCRYPTED'),
         })
-        this.echo.channel('global')
+        this.echo.channel('imagina.notifications')
           .listen(`.notification.new`, data => {
             this.notifications.data.unshift(data)
             this.notifications.pagination.total ++
@@ -201,17 +222,17 @@
         })
       },
       showPushNotitication(data){
-        if (this.permissionForNotification){
-          console.warn(data)
+        if (this.permissionForNotification && this.focused){
+          //console.warn(window.Notification)
           navigator.serviceWorker.ready.then( registration => {
-            let sn = registration.showNotification(data.name, {
+            let sn = registration.showNotification(data.title, {
               body: data.message,
-              icon: '',
+              icon: 'https://enred-group.imaginacolombia.com/themes/imagina2018/img/logo/logo.png',
               click_action: ''
             })
           })
         }
-      }
+      },
     }
   }
 </script>

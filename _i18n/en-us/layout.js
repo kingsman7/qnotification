@@ -1,6 +1,8 @@
 export default {
   newNotification : 'New Notification',
   updateNotification : 'Update Notification',
+  allNotifications: 'All Notifications',
+  thereAreNoNotifications: 'There are no notifications',
   form : {
     subtitle: 'Sub Title',
     userId: 'User',
