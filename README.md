@@ -2,7 +2,7 @@
 
 ## Installation
 
-`` npm i @imagina/qnotification@2.0.0 ``
+`` npm i @imagina/qnotification@2.0.1 ``
 
 ## Aditional Configuration
   ### Add the following lines in .env file, with pusher keys:
