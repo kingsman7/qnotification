@@ -1,4 +1,4 @@
-## QNOTIFICATION  | 2.0.0
+## QNOTIFICATION  | 2.0.1
 
 ## Installation
 
@@ -40,5 +40,7 @@
   | ------------- | ------------- |
   | notifications | @imagina/qnotification/_components/widgets/notifications |
  
+## Style Customization
+  You can customize the notification widget, referring to it with the *widget-notification* identifier
  
  ###### Note: [version 1.0.0](https://github.com/imagina/qnotification/tree/1.0.0)
