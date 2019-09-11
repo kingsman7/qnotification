@@ -1,90 +1,90 @@
 <template>
-<div>
-  <div class="relative-position q-mr-md">
-    <q-chip
-      round
-      text-color="black"
-      color="white"
-      floating>{{animatedNumber}}</q-chip>
-  </div>
-  <q-btn-dropdown
-    dense
-    flat
-    rounded
-    class="q-mr-lg"
-    icon="notifications">
-    <q-infinite-scroll :handler="loadMore" style="min-height: 100px;">
-      <q-list  class="q-pr-sm">
-        <q-list-header>
-          <q-item-main>
-            <q-btn
-              :to="{name: 'qnotification.admin.notifications.index'}"
-              dense
-              flat
-              color="primary"
-              :label="$tr('qnotification.layout.allNotifications')"
-              class="full-width"/>
-          </q-item-main>
-        </q-list-header>
-        <div v-if="notifications.data.length">
-          <q-item
-            v-for="(notification, index) in notifications.data"
-            :key="index">
-            <q-item-side
-              color="info"
-              :icon="notification.icon_class" />
-            <q-item-main
-              :label="notification.title"
-              :sublabel="notification.message"/>
-            <q-item-side
-              right
-              :stamp="notification.timeAgo" />
-            <q-item-side right >
-              <q-btn
-                inverted
-                color="primary"
-                outline
-                dense
-                flat
-                round
-                @click="$router.push({name: notification.link})"
-                size="10px"
-                icon="fas fa-external-link-alt"/>
-            </q-item-side>
-            <q-item-side right >
-              <q-btn
-                inverted
-                color="primary"
-                outline
-                flat
-                dense
-                round
-                @click="updateNotification(notification)"
-                size="15px"
-                icon="far fa-times-circle"/>
-            </q-item-side>
-          </q-item>
-        </div>
-        <div v-else class="row justify-center">
-          <q-item>
-            <q-item-side></q-item-side>
+  <div id="widget-notification">
+    <div class="relative-position q-mr-md">
+      <q-chip
+        round
+        text-color="black"
+        color="white"
+        floating>{{notifications.pagination.total}}</q-chip>
+    </div>
+    <q-btn-dropdown
+      dense
+      flat
+      rounded
+      class="q-mr-lg"
+      icon="notifications">
+      <q-infinite-scroll :handler="loadMore" style="min-height: 100px;">
+        <q-list  class="q-pr-sm">
+          <q-list-header>
             <q-item-main>
-              {{$tr('qnotification.layout.thereAreNoNotifications')}}
+              <q-btn
+                :to="{name: 'qnotification.admin.notifications.index'}"
+                dense
+                flat
+                color="primary"
+                :label="$tr('qnotification.layout.allNotifications')"
+                class="full-width"/>
             </q-item-main>
-          </q-item>
+          </q-list-header>
+          <div v-if="notifications.data.length">
+            <q-item
+              v-for="(notification, index) in notifications.data"
+              :key="index">
+              <q-item-side
+                color="info"
+                :icon="notification.icon_class" />
+              <q-item-main
+                :label="notification.title"
+                :sublabel="notification.message"/>
+              <q-item-side
+                right
+                :stamp="notification.timeAgo" />
+              <q-item-side right >
+                <q-btn
+                  inverted
+                  color="primary"
+                  outline
+                  dense
+                  flat
+                  round
+                  @click="$router.push({name: notification.link})"
+                  size="10px"
+                  icon="fas fa-external-link-alt"/>
+              </q-item-side>
+              <q-item-side right >
+                <q-btn
+                  inverted
+                  color="primary"
+                  outline
+                  flat
+                  dense
+                  round
+                  @click="updateNotification(notification)"
+                  size="15px"
+                  icon="far fa-times-circle"/>
+              </q-item-side>
+            </q-item>
+          </div>
+          <div v-else class="row justify-center">
+            <q-item>
+              <q-item-side></q-item-side>
+              <q-item-main>
+                {{$tr('qnotification.layout.thereAreNoNotifications')}}
+              </q-item-main>
+            </q-item>
+          </div>
+        </q-list>
+        <div
+          class="row justify-center"
+          v-if="this.notifications.pagination.page < this.notifications.pagination.lastPage">
+          <q-spinner-dots
+            color="primary"
+            slot="message"
+            :size="40"/>
         </div>
-      </q-list>
-      <div
-        class="row justify-center"
-        v-if="this.notifications.pagination.page <= this.notifications.pagination.lastPage">
-        <q-spinner-dots
-          color="primary"
-          slot="message"
-          :size="40"/>
-      </div>
-    </q-infinite-scroll>
-  </q-btn-dropdown>
-</div>
+      </q-infinite-scroll>
+    </q-btn-dropdown>
+  </div>
 </template>
 
 <script>
@@ -113,9 +113,6 @@
       unreadNotifications (){
         return 0
       },
-      animatedNumber: function() {
-        return this.tweenedNumber.toFixed(0);
-      },
       focusWindow(){
         window.onfocus = function() {
           this.focused = true;
@@ -129,9 +126,7 @@
       }
     },
     watch: {
-      'notifications.pagination.total': function(newValue) {
-        TweenLite.to(this.$data, 0.5, { tweenedNumber: newValue });
-      },
+
     },
     created() {
       this.$nextTick(()=> {
@@ -225,7 +220,7 @@
         if (this.permissionForNotification && this.focused){
           //console.warn(window.Notification)
           navigator.serviceWorker.ready.then( registration => {
-            let sn = registration.showNotification(data.title, {
+            registration.showNotification(data.title, {
               body: data.message,
               icon: 'https://enred-group.imaginacolombia.com/themes/imagina2018/img/logo/logo.png',
               click_action: ''
