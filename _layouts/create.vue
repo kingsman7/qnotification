@@ -208,7 +208,6 @@
 	}
 </script>
 <style lang="stylus">
-	@import "~variables";
 	#formNotification
 		border 1px solid $grey-4
 

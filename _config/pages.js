@@ -1,27 +1,23 @@
-//Pages of Notifications
-import master from 'src/layouts/master'
-import blank from 'src/layouts/blank'
-
 export default {
 	//index
 	index: {
 		permission: null,
 		activated: true,
 		path: '/notifications',
-		name: 'index',
-		layout: require('@imagina/qnotification/_layouts/notifications').default,
-		containerLayout: master,
+		name: 'notifications.index',
+		page: () => import('@imagina/qnotification/_layouts/notifications'),
+		layout: () => import('src/layouts/master'),
 		title: 'Notifications',
 		icon: 'fas fa-chart-bar'
 	},
-	//creae
+	//create
 	create: {
 		permission: 'fhia.roles.admin',
 		activated: true,
 		path: '/notifications/create',
 		name: 'notifications.create',
-		layout: require('@imagina/qnotification/_layouts/create').default,
-		containerLayout: master,
+		page: () => import('@imagina/qnotification/_layouts/create'),
+		layout: () => import('src/layouts/master'),
 		title: 'Create',
 		icon: 'fas fa-chart-bar'
 	},

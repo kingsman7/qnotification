@@ -1,4 +1,4 @@
-import crud from '@imagina/qhelper/_services/baseService'
+import crud from '@imagina/qcrud/_services/baseService'
 
 export default {
   crud,

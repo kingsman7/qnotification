@@ -117,7 +117,6 @@
   }
 </script>
 <style lang="stylus">
-  @import "~variables";
   #pageNotifications
     .q-list
       padding 0
