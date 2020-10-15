@@ -1,6 +1,6 @@
 import http from "axios"
-import config from 'src/config/index'
-import {remember} from '@imagina/qhelper/_plugins/remember'
+import config from '@imagina/qsite/_config/master/app'
+import {remember} from '@imagina/qsite/_plugins/remember'
 
 export default {
   index(){

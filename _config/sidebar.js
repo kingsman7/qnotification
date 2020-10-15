@@ -1,13 +1,11 @@
 const pages = config('pages') // Get Pages from config
 
-console.warn(pages)
-
 export default [
-	{
+  {
     title: 'qnotification.sidebar.adminGroup',
-    icon: 'notifications',
+    icon: 'fas fa-bell',
     children: [
-      pages.qnotification.notifications
+      pages.qnotification.providers
     ]
   },
 ]

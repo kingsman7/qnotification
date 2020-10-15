@@ -168,10 +168,10 @@
         let params = {params: {}}
         this.$crud.update('apiRoutes.qnotification.notifications', notification.id, notification, params)
           .then( response => {
-            
+
             let indexOfNotificationUpdated = this.notifications.data.indexOf( notification )
             this.notifications.data.splice( indexOfNotificationUpdated, 1 )
-            
+
             this.notifications.pagination.total --
             this.loading = false
           })
@@ -214,7 +214,7 @@
           if (response === 'granted'){
             this.permissionForNotification = true
           }
-        })
+        }).catch(error => {})
       },
       showPushNotitication(data){
         if (this.permissionForNotification && this.focused){
@@ -225,7 +225,7 @@
               icon: 'https://enred-group.imaginacolombia.com/themes/imagina2018/img/logo/logo.png',
               click_action: ''
             })
-          })
+          }).catch(error => {})
         }
       },
     }

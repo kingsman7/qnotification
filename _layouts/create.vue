@@ -115,7 +115,7 @@
 
 	//plugins
 	import {required, email, numeric, minLength} from 'vuelidate/lib/validators'
-	import {alert} from '@imagina/qhelper/_plugins/alert'
+	import {alert} from '@imagina/qsite/_plugins/alert'
 
 	export default {
 		props: {},
@@ -176,7 +176,7 @@
 							this.loading = false
 						})
 					}
-				})
+				}).catch(error => {})
 			},
 			//Send notification
 			sendNotification() {
@@ -191,7 +191,7 @@
 
 					notificationService.create(this.form).then(response => {
 						this.successNotification()
-					})
+					}).catch(error => {})
 				} else {
 					alert.error('Please review the fields again.', 'bottom');
 				}

@@ -10,7 +10,7 @@
       <div class="full-width row relative-position">
         <!--Empty notifications-->
         <div class="full-width" v-if="!$store.state.notification.notifications.length">
-          <empty-component></empty-component>
+          <!--<empty-component></empty-component>-->
         </div>
 
         <!--Notifications-->
@@ -69,11 +69,10 @@
 </template>
 <script>
   import notificationService from '@imagina/qnotification/_services/notifications'
-  import emptyComponent from 'src/components/empty'
 
   export default {
     props: {},
-    components: {emptyComponent},
+    components: {},
     watch: {},
     mounted() {
       this.$nextTick(function () {
@@ -93,7 +92,7 @@
         //Request Notifications
         this.$store.dispatch('notification/GET_NOTIFICATIONS').then(response => {
           this.loading = false
-        })
+        }).catch(error => {})
       },
       //Redirec to URL from notification
       goToNotificationURL(url) {

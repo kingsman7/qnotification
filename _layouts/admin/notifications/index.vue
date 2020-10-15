@@ -1,5 +1,10 @@
 <template>
   <div id="pageId" class="q-layout-page layout-padding">
+    <!--TITLE-->
+    <h1 class="q-headline text-primary">
+      <q-icon v-if="$route.meta.icon" :name="$route.meta.icon"/>
+      {{$tr($route.meta.title)}}
+    </h1>
 
     <!---Component CRUD-->
     <crud :crud-data="import('@imagina/qnotification/_crud/crudNotifications')" />
@@ -24,5 +29,4 @@
   }
 </script>
 <style lang="stylus">
-  
 </style>

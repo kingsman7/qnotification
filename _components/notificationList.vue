@@ -100,7 +100,7 @@
 
 			<q-layout-footer id="footer" class="no-shadow bg-white">
 				<q-btn flat color="primary"
-				       :to="{name : 'notifications.index'}">
+				       :to="{name : 'index'}">
 					show all
 				</q-btn>
 				<q-btn flat class="float-right"
@@ -114,8 +114,7 @@
 	</div>
 </template>
 <script>
-	import {helper} from '@imagina/qhelper/_plugins/helper';
-	import notificationServices from '@imagina/qnotification/_services/notifications'
+	import {helper} from '@imagina/qsite/_plugins/helper';
 	import auth from '@imagina/quser/_plugins/auth' //Middleware auth
 
 	export default {
@@ -167,7 +166,6 @@
 	}
 </script>
 <style lang="stylus">
-	@import "~variables";
 	#notificationList
 		.q-tabs
 			.q-tabs-head

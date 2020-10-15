@@ -1,15 +1,9 @@
 <template></template>
 <script>
   export default {
-    data() {
-      return {
-        crudId: this.$uid()
-      }
-    },
     computed: {
       crudData() {
         return {
-          crudId: this.crudId,
           apiRoute: 'apiRoutes.qnotification.notifications',
           permission: 'notification.notifications',
           create: {
@@ -66,10 +60,6 @@
           },
           formRight: {},
         }
-      },
-      //Crud info
-      crudInfo() {
-        return this.$store.state.qcrudComponent.component[this.crudId] || {}
       }
     },
   }

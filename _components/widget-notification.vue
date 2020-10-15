@@ -3,7 +3,7 @@
   <q-btn round dense flat icon="fas fa-bell"  @click="showNotifications">
     <q-chip floating color="red" v-if="this.$store.state.notification.news">{{this.$store.state.notification.news }}</q-chip>
   </q-btn>
-  
+
   <q-modal
     v-model="opened"
     position="top">
@@ -14,9 +14,9 @@
       <q-item v-for="(notification,index) in this.$store.state.notification.notifications" :key="index">
         <q-item-side :avatar="notification.from == 'me' ? 'statics/icons/icon-128x128.png' : notification.avatar" />
         <q-item-main :label="notification.message" label-lines="1" />
-        
+
           <q-item-side right>
-            
+
             <q-item-tile stamp>
               <q-btn
                 v-if="notification.type == 'requestFailed'"
@@ -28,11 +28,11 @@
             </q-btn>
               1 week ago
             </q-item-tile>
-            
+
           </q-item-side>
-      
+
       </q-item>
-    
+
     </q-list>
     <q-btn
       color="primary"
@@ -43,9 +43,9 @@
   </div>
 </template>
 <script>
-  import {alert} from '@imagina/qhelper/_plugins/alert';
-  import {helper} from '@imagina/qhelper/_plugins/helper';
-  
+  import {alert} from '@imagina/qsite/_plugins/alert';
+  import {helper} from '@imagina/qsite/_plugins/helper';
+
   export default {
     props: {},
     components: {},
@@ -73,9 +73,8 @@
         this.$router.push({name:notification.data.frontUrl,query:notification.data.request.data})
       }
     }
-    
+
   }
 </script>
 <style lang="stylus">
-  @import "~variables";
 </style>

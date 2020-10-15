@@ -1,11 +1,12 @@
-const moduleName = 'notification';
+const moduleName = 'inotification';
 const moduleVersion = 'v1';
-//const baseApiUrl = `${env('BASE_URL', 'http://localhost:8000')}/api`;
-//const urlBase = `${baseApiUrl}/${moduleName}/${moduleVersion}`
 const urlBase = `/${moduleName}/${moduleVersion}`
 
 export default {
   urlBase : urlBase,
   version: moduleVersion,
   notifications : `${urlBase}/notifications`,
+  notifications : `${urlBase}/providers`,
+  rules : `${urlBase}/rules`,
+  rulesConfig : `${urlBase}/rules/config`,
 }
