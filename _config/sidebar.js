@@ -5,7 +5,7 @@ export default [
     title: 'qnotification.sidebar.adminGroup',
     icon: 'fas fa-bell',
     children: [
-      pages.qnotification.providers
+      pages.qnotification.setting
     ]
   },
 ]

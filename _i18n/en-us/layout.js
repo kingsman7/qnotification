@@ -1,17 +1,18 @@
 export default {
-  newNotification : 'New Notification',
-  updateNotification : 'Update Notification',
-  allNotifications: 'All Notifications',
-  thereAreNoNotifications: 'There are no notifications',
-  form : {
-    subtitle: 'Sub Title',
-    userId: 'User',
-    type: 'Type',
-    message: 'Message',
-    iconClass: 'Icon Class',
-    link: 'Link',
-    isRead: 'Is Read',
-    title : 'Title',
+  newRule : 'Nueva regla',
+  updateRule : 'Actualizar regla',
+  label : {
+    provider : 'Provider | Providers',
+    rule : 'Notification rules',
+    event : 'Event | Events',
+    condition : 'Condition | Conditions',
+    newNotifications : 'News',
+    earlierNotifications : 'Earlier'
   },
-  message : {}
+  message : {
+    chooseEventCategory : 'Choose a event. You may select multiple events.',
+    conditions : 'The following conditions can be applied to restrict when this rule is executed',
+    settingProviders : 'Providers setting'
+  },
+  form : {}
 }

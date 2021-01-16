@@ -1,59 +1,66 @@
-import {helper} from '@imagina/qsite/_plugins/helper'; //LocalForage
-import Echo from "laravel-echo";
-import store from 'src/store/index';
-import Pusher from "pusher-js";
-import {alert} from '@imagina/qsite/_plugins/alert'
+import laravelEcho from '@imagina/qnotification/_plugins/laravel-echo'
+import alert from '@imagina/qsite/_plugins/alert'
 
-class Notification {
-  constructor() {
-    if (process.env.MODE !== 'ssr') {
-      if (env('PUSHER_ACTIVE') && (env('PUSHER_ACTIVE') != 'false')) {
-        this.Echo = new Echo({
-          broadcaster: env('BROADCAST_DRIVER', 'pusher'),
-          key: env('PUSHER_APP_KEY'),
-          cluster: env('PUSHER_APP_CLUSTER'),
-          encrypted: env('PUSHER_APP_ENCRYPTED'),
-        });
-      }
+export default class NotificationPlugin {
+  constructor(store) {
+    this.echo = false //Default attribute to laravel echo
+    this.doConnectionLaravelEcho(store)//Do connection with laravel echo
+    //this.requestNavigatorPermission()//Request navigator permission
+  }
+
+  //Connect to laravel echo
+  async doConnectionLaravelEcho(store) {
+    if (process.env.CLIENT) {
+      let connection = new laravelEcho(store)
+      await connection.init(store)
+      if (connection && connection.echo) this.echo = connection.echo
     }
   }
 
-  leave() {
-    this.Echo.leave('global')
+  //Request Navigator permission
+  requestNavigatorPermission() {
+    if (process.env.CLIENT) {
+      window.Notification.requestPermission()
+    }
   }
 
-  global(user) {
-    this.Echo.leave('global')
-    let userId = store.state.auth.userData.id
-    this.Echo.channel('global')
-      .listen('.clearCache', (message) => {
-        helper.clearCache(message["key"]);
-      })
-      .listen('.notification' + userId, (response) => {
-        store.commit('notification/PUSH_NOTIFICATION', response.data);
-      })
-      .listen('.report' + userId, (response) => {
-        let data = response.data
-        // server failed
-        if (store.getters['report/isGeneratingReport'](data.reportId ? data.reportId : data.reportName)) {
-          let storeData = {
-            id: data.reportId ? data.reportId : data.reportName,
-            isGenerating: false,
-            isAvailable: data.failed ? false : true,
-            generatedAt: data.failed ? false : data.generatedAt,
-            failed: data.failed ? data.failed : false,
-            reportTitle: data.failed ? '' : data.reportTitle,
-            reportName: data.reportName
-          }
-          store.dispatch('report/SET_REPORT_DATA', storeData)
-          if (!data.failed)
-            alert.success('Report: ' + data.reportTitle + ', is available', 'top')
-          else
-            alert.error('Report: ' + helper.convertStringToSnakeCase(data.reportName) + ', failed', 'bottom')
+  //Push notification to navigator
+  pushNavigator(params = {}) {
+    return new Promise((resolve, reject) => {
+      //Validate if is client side
+      if (!process.env.CLIENT) return reject('No client side')
+      //Push notification
+      window.Notification.requestPermission(result => {
+        if (result === 'granted') {
+          navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification(params.title, {
+              body: params.body,
+              icon: params.icon,
+              data: params.data || {}
+            })
+          }).catch(error => {
+            console.error('[notification-plugin]::pushNavigator - ', error)
+          })
         }
-      });
+      })
+    })
+  }
+
+  //Validate if navigator can share
+  navigatorCanShare() {
+    if (!process.env.CLIENT) return false
+    return navigator.canShare ? true : false
+  }
+
+  //Share navigator
+  navigatorShare(params = {}) {
+    let text = (params.text || '')
+    let url = (params.url || window.location.origin)
+
+    //navigator share
+    navigator.share({text: text, url: url}).then(function () {
+    }, function (err) {
+      alert.error('No fue posible compartir en este dispositivo :(');
+    });
   }
 }
-
-const notification = new Notification();
-export default notification

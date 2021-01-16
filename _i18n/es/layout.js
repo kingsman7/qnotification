@@ -1,17 +1,18 @@
 export default {
-  newNotification : 'Nueva Notificacion',
-  updateNotification : 'Actualizar Notificacion',
-  allNotifications: 'Todas las Notificaciones',
-  thereAreNoNotifications: 'No hay Notificaciones',
-  form : {
-    subtitle: 'Sub Tìtulo',
-    userId: 'Usuario',
-    type: 'Tipo',
-    message: 'Mensaje',
-    iconClass: 'Icono',
-    link: 'Enlace',
-    isRead: 'Es ledido',
-    title : 'Título',
+  newRule : 'Nueva regla',
+  updateRule : 'Actualizar regla',
+  label : {
+    provider : 'Proveedor | Proveedores',
+    rule : 'Reglas de notificación',
+    event : 'Evento | Eventos',
+    condition : 'Condición | Condiciones',
+    newNotifications : 'Nuevas',
+    earlierNotifications : 'Anteriores'
   },
-  message : {}
+  message : {
+    chooseEventCategory : 'Seleccione un evento. Puede seleccionar múltiples eventos.',
+    conditions : 'Las siguientes condiciones pueden ser aplicadas cuando está regla se ejecute',
+    settingProviders : 'Configuración del proveedores'
+  },
+  form : {}
 }

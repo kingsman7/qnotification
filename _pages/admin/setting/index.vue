@@ -1,0 +1,51 @@
+<template>
+  <q-page id="notificationsConfigPage">
+    <!--Content-->
+    <div id="contentConfig" class="row q-col-gutter-y-xl">
+      <!--Providers-->
+      <div id="contentProviders" class="col-12">
+        <!--Title-->
+        <div class="text-h6 text-grey-9">
+          <q-icon name="fab fa-stack-exchange" class="q-mr-xs" />
+          {{$trp('qnotification.layout.label.provider')}}
+        </div>
+        <q-separator class="q-mb-md q-mt-xs" />
+        <!--Component-->
+        <providers/>
+      </div>
+      <!--Rules-->
+      <div id="contentRules" class="col-12" v-if="false">
+        <!--Title-->
+        <div class="text-h6 text-grey-9">
+          <q-icon name="fas fa-directions" class="q-mr-xs" />
+          {{$trp('qnotification.layout.label.rule')}}
+        </div>
+        <q-separator class="q-mb-md q-mt-xs" />
+        <!--Component-->
+        <rules/>
+      </div>
+    </div>
+  </q-page>
+</template>
+<script>
+  //Components
+  import providers from '@imagina/qnotification/_components/providers'
+  import rules from '@imagina/qnotification/_components/rules'
+
+  export default {
+    props: {},
+    components: {providers, rules},
+    watch: {},
+    mounted() {
+      this.$nextTick(function () {
+      })
+    },
+    data() {
+      return {}
+    },
+    computed: {},
+    methods: {}
+  }
+</script>
+<style lang="stylus">
+</style>

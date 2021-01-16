@@ -1,5 +1,8 @@
 export default {
   adminGroup : 'Notifications',
-  adminNotifications : 'Notifications',
-  adminProviders : 'Providers'
+  adminProvider : 'Providers',
+  adminConfig : {
+    title : 'Setting',
+    headerTitle : 'Notifications setting',
+  }
 }

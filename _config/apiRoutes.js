@@ -1,4 +1,4 @@
-const moduleName = 'inotification';
+const moduleName = 'notification';
 const moduleVersion = 'v1';
 const urlBase = `/${moduleName}/${moduleVersion}`
 
@@ -6,7 +6,8 @@ export default {
   urlBase : urlBase,
   version: moduleVersion,
   notifications : `${urlBase}/notifications`,
-  notifications : `${urlBase}/providers`,
+  markRead : `${urlBase}/notifications/mark-read`,
+  providers : `${urlBase}/providers`,
   rules : `${urlBase}/rules`,
-  rulesConfig : `${urlBase}/rules/config`,
+  rulesConfig : `${urlBase}/rules/config`
 }
