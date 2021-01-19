@@ -26,11 +26,13 @@ export default class echo {
   //Get pusher data
   getKeys() {
     return new Promise((resolve, reject) => {
-      let requestData = {refresh: false}// Request data
+      let requestData = {refresh: true}// Request data
       if (!this.userId) return resolve(false)//Validate sesion
 
       //Request
       crud.index('apiRoutes.qnotification.providers', requestData).then(response => {
+        //Validate response
+        if (!Array.isArray(response.data)) return resolve(false)//Get pusher keys
         let pusherData = response.data.find(item => item.name == 'Pusher')
         //validate response
         if (pusherData && pusherData.data && pusherData.data.fields) {
