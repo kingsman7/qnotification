@@ -41,7 +41,7 @@ export default class echo {
           else resolve(false)
         }
       }).catch(error => {
-        console.warn(error)
+        console.error(error)
         reject(error)
       })
     })
