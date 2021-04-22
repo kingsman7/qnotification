@@ -11,6 +11,7 @@
       crudData() {
         return {
           crudId: this.crudId,
+          entityName: config("main.qnotification.entityNames.rule"),
           apiRoute: 'apiRoutes.qnotification.rules',
           permission: null,
           create: {
