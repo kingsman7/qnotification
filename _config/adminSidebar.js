@@ -6,7 +6,7 @@ export default [
     icon: 'fas fa-bell',
     children: [
       pages.qnotification.setting,
-      pages.qnotification.notification
+      //pages.qnotification.notification
     ]
   },
 ]

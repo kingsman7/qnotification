@@ -27,7 +27,7 @@
               </div>
               <!--Date-->
               <div class="col-12 text-grey-6 text-caption">
-                {{ $date.getHumanCalendar(item.createdAt)}}
+                {{ $date.getHumanCalendar(item.createdAt) }}
               </div>
             </div>
           </div>
@@ -42,7 +42,7 @@
     <!--Actions go notification-->
     <div class="text-center absolute-bottom q-my-md">
       <q-btn unelevated color="green" rounded no-caps :label="$trp('ui.label.notification')" icon="fas fa-bell"
-             :to="{name : 'qnotification.admin.notification'}">
+             :to="{name : 'qnotification.main.notifications.index'}">
       </q-btn>
     </div>
   </div>
@@ -64,7 +64,7 @@ export default {
     return {
       loading: false,
       items: false,
-      date : false,
+      date: false,
       recomendations: false,
       thumbStyle: {
         right: '4px',
@@ -93,14 +93,13 @@ export default {
         this.loading = true
         //Request Params
         let requestParams = {
+          refresh: true,
           params: {
+            take: 10,
             filter: {
-              order: {
-                field: 'created_at',
-                way: 'desc',
-              }
-            },
-            take: 10, page: 1
+              me: true,
+              type: 'broadcast'
+            }
           }
         }
         //get notifications

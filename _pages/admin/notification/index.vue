@@ -6,7 +6,7 @@
     <div class="text-subtitle1 row item items-center bg-white q-pa-md q-mb-sm">
       <div class="relative-position">
         <div class="row items-center q-pl-sm">
-        <q-icon name="fas fa-bell" color="primary" size="20px" class="icon-item bg-white"/>
+          <q-icon name="fas fa-bell" color="primary" size="20px" class="icon-item bg-white"/>
           <div class="q-pl-xl">{{ $trp('ui.label.notification', {capitalize: true}) }}</div>
         </div>
       </div>
@@ -29,7 +29,7 @@
             </div>
             <!--Date-->
             <div class="col-12 text-grey-6 text-caption">
-              {{ $date.getHumanCalendar(item.createdAt)}}
+              {{ $date.getHumanCalendar(item.createdAt) }}
             </div>
           </div>
         </div>
@@ -46,7 +46,8 @@
 <script>
 export default {
   beforeDestroy() {
-    this.$eventBus.$off(`notification.new${this.$store.quserAuth.userId}`)
+    this.$root.$off('page.data.refresh')
+    this.$eventBus.$off(`notification.new.${this.$store.state.quserAuth.userId}`)
   },
   props: {},
   components: {},
@@ -74,8 +75,20 @@ export default {
   computed: {},
   methods: {
     init() {
-
+      this.listenEvents()
       this.getData()
+    },
+    //Listen pusher message
+    listenEvents() {
+      //Refresh page
+      this.$root.$on('page.data.refresh', () => {
+        this.getData(true)
+      })
+      //Appintment completed
+      /*this.$eventBus.$on('iappointment.appoinment.was.changed', (response) => {
+        console.warn('Pusher', response)
+        this.getData(true)
+      })*/
     },
     // Get data
     getData() {
@@ -83,13 +96,12 @@ export default {
         this.loading = true
         //Request Params
         let requestParams = {
+          refresh: true,
           params: {
             filter: {
-              order: {
-                field: 'created_at',
-                way: 'desc',
-              }
-            },
+              me: true,
+              type: 'broadcast'
+            }
           }
         }
         //get notifications

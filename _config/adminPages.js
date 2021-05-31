@@ -17,20 +17,5 @@ export default {
     subHeader: {
       refresh: true,
     }
-  },
-  notification: {
-    permission: 'notification.notifications.manage',
-    activated: true,
-    path: 'qnotification/notificaion/index',
-    name: 'qnotification.admin.notification',
-    layout: () => import('@imagina/qsite/_layouts/master'),
-    page: () => import('@imagina/qnotification/_pages/admin/notification/index'),
-    title: 'ui.label.notification',
-    headerTitle: 'ui.label.notification',
-    icon: 'far fa-bell',
-    authenticated: true,
-    subHeader: {
-      refresh: true,
-    }
-  },
+  }
 }
