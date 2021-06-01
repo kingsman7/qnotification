@@ -50,9 +50,6 @@
 
 <script>
 export default {
-  beforeDestroy() {
-    this.$eventBus.$off(`notification.new${this.$store.quserAuth.userId}`)
-  },
   props: {},
   components: {},
   mounted() {
