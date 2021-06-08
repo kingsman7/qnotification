@@ -67,8 +67,8 @@ export default class echo {
       //Open channel
       this.echo.channel('imagina.notifications')
         .listen(`.notification.new.${this.userId}`, (response) => {
-          //Global event
-          eventBus.$emit(`notification.new.${this.userId}`, response)
+          //Bell notification
+          if (!response.isAction) response.frontEvent = {...response, name: 'inotification.notifications.new'}
           //Custom event from backend
           if (response.frontEvent && response.frontEvent.name) {
             eventBus.$emit(response.frontEvent.name, response.frontEvent)
