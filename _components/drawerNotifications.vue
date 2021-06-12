@@ -13,7 +13,7 @@
                    class="relative-position">
       <!--Notifications List-->
       <div v-for="notification in notificationsData" :key="notification.id" @click="handlerActon(notification)"
-           :class="`item ${notification.action ? 'cursor-pointer' : ''}`">
+           :class="`item ${notification.link ? 'cursor-pointer' : ''}`">
         <!--Content Notification-->
         <div class="relative-position q-pl-xl">
           <div class="row items-center q-pl-sm">
@@ -101,7 +101,7 @@ export default {
       if (notifications && notifications.length) {
         notifications.forEach(notification => {
           //Validate if is a important notification
-          if (!notification.isRead && notification.isImportant)
+          if (!notification.isRead && notification.options && notification.options.isImportant)
             importantNotification = true
           //Show badge header button
           if (!notification.isRead)
@@ -113,8 +113,8 @@ export default {
             icon: notification.icon || 'fas fa-bell',
             createdAt: notification.createdAt || this.$moment(),
             isRead: notification.isRead || false,
+            link: notification.link || false,
             isImportant: (notification.options && notification.options.isImportant) ? notification.options.isImportant : false,
-            action: (notification.options && notification.options.action) ? notification.options.action : null
           })
         })
       }
@@ -123,7 +123,7 @@ export default {
       if (importantNotification) {
         this.$alert.warning({
           message: this.$tr('qnotification.layout.message.importantNotifications'),
-          timeOut: 10000,
+          timeOut: 30000,
           icon: 'fas fa-bell',
           actions: [{
             label: this.$tr('ui.label.show'),
@@ -198,13 +198,8 @@ export default {
         let notificationIndex = this.notifications.findIndex(item => item.id == notification.id)
         this.notifications[notificationIndex].isRead = true
       }
-      //Do notification Action
-      if (notification.action) {
-        let action = notification.action//Get action
-        if (action.toUrl) this.$helper.openExternalURL(action.toUrl, false)//open expernal URL
-        else if (action.toVueRoute) this.$router.push(action.toVueRoute)//Open vue route
-        else if (action.handler) action.handler()//Run handler
-      }
+      //Go to link
+      if (notification.link) this.$helper.openExternalURL(notification.link, false)//open expernal URL
     },
   }
 }
