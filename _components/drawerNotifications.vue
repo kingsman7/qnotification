@@ -123,7 +123,7 @@ export default {
       if (importantNotification) {
         this.$alert.warning({
           message: this.$tr('qnotification.layout.message.importantNotifications'),
-          timeOut: 30000,
+          timeOut: 300000,
           icon: 'fas fa-bell',
           actions: [{
             label: this.$tr('ui.label.show'),
