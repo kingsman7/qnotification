@@ -92,7 +92,6 @@ export default {
       //Default response
       let response = []
       let notifications = this.$clone(this.notifications)
-      let importantNotification = false
 
       //Emit badge
       this.$eventBus.$emit('header.badge.manage', {notification: false})
@@ -100,14 +99,8 @@ export default {
       //Parse notifications
       if (notifications && notifications.length) {
         notifications.forEach(notification => {
-          //Validate if is a important notification
-          if (!notification.isRead && notification.options && notification.options.isImportant)
-            importantNotification = true
-          //Show badge header button
-          if (!notification.isRead)
-            this.$eventBus.$emit('header.badge.manage', {notification: true})
-          //Define notification data
-          response.push({
+          //Instance notification data
+          let notificationData = {
             id: notification.id || this.$uid(),
             message: `<b>${notification.title}</b> ${notification.message}`,
             icon: notification.icon || 'fas fa-bell',
@@ -115,21 +108,28 @@ export default {
             isRead: notification.isRead || false,
             link: notification.link || false,
             isImportant: (notification.options && notification.options.isImportant) ? notification.options.isImportant : false,
-          })
-        })
-      }
+          }
 
-      //Show alert important notification
-      if (importantNotification) {
-        this.$alert.warning({
-          message: this.$tr('qnotification.layout.message.importantNotifications'),
-          timeOut: 300000,
-          icon: 'fas fa-bell',
-          actions: [{
-            label: this.$tr('ui.label.show'),
-            color: 'white',
-            handler: () => this.$eventBus.$emit('openMasterDrawer', 'notification')
-          }],
+          //Show alert important notification
+          if (!notification.isRead && notification.options && notification.options.isImportant) {
+            this.$alert.warning({
+              mode: 'modal',
+              message: notificationData.message,
+              icon: notificationData.icon,
+              actions: [{
+                label: this.$tr('ui.label.ok'),
+                color: 'green',
+                handler: () => this.handlerActon(notificationData)
+              }],
+            })
+          }
+
+          //Show badge header button
+          if (!notification.isRead)
+            this.$eventBus.$emit('header.badge.manage', {notification: true})
+
+          //Add notification data to response
+          response.push(notification)
         })
       }
 
@@ -199,7 +199,7 @@ export default {
         this.notifications[notificationIndex].isRead = true
       }
       //Go to link
-      if (notification.link) this.$helper.openExternalURL(notification.link, false)//open expernal URL
+      if (notification.link) this.$helper.openExternalURL(notification.link, true)//open expernal URL
     },
   }
 }
