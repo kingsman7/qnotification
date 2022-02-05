@@ -9,8 +9,8 @@
     <!--Separator-->
     <q-separator class="q-my-md"/>
     <!--Notifications-->
-    <q-scroll-area :thumb-style="thumbStyle" v-if="notificationsData.length" :style="scrollAreaStyles"
-                   class="relative-position">
+    <q-scroll-area :thumb-style="thumbStyle" v-if="notificationsData.length" class="relative-position"
+                   style="height: calc(100vh - 93px); width: 100%">
       <!--Notifications List-->
       <div v-for="notification in notificationsData" :key="notification.id" @click="handlerActon(notification)"
            :class="`item ${notification.link ? 'cursor-pointer' : ''}`">
@@ -81,12 +81,6 @@ export default {
     }
   },
   computed: {
-    //size window
-    scrollAreaStyles() {
-      let windowWith = window.innerWidth
-      let windowSize = windowWith >= '992' ? 'desktop' : 'mobile'
-      return `height: calc(100vh - ${windowSize == 'mobile' ? '135' : '185'}px`
-    },
     //Items transformed
     notificationsData() {
       //Default response
@@ -221,6 +215,7 @@ export default {
     .text-item
       min-height 60px
       line-height 1.2
+      max-width 190px
 
     .icon-item
       font-size 23px
