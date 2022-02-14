@@ -6,7 +6,7 @@
       <div id="contentProviders" class="col-12">
         <!--Page Actions-->
         <div class="box box-auto-height q-mb-md">
-          <page-actions :title="`${$tr($route.meta.headerTitle)} | ${$trp('qnotification.layout.label.provider')}`"/>
+          <page-actions :title="`${$tr($route.meta.headerTitle)} | ${$trp('notification.cms.label.provider')}`"/>
         </div>
         <!--Component-->
         <providers/>
@@ -16,7 +16,7 @@
         <!--Title-->
         <div class="text-h6 text-grey-9">
           <q-icon name="fas fa-directions" class="q-mr-xs"/>
-          {{ $trp('qnotification.layout.label.rule') }}
+          {{ $trp('notification.cms.label.rule') }}
         </div>
         <q-separator class="q-mb-md q-mt-xs"/>
         <!--Component-->

@@ -19,7 +19,7 @@
               <label :class="`text-${providerStatus(provider).color}`">{{ providerStatus(provider).label }}</label>
               <q-space/>
               <!--Setting-->
-              <q-btn outline color="primary" rounded dense no-caps :label="$tr('ui.label.setup')"
+              <q-btn outline color="primary" rounded dense no-caps :label="$tr('isite.cms.label.setup')"
                      @click="modal.provider = provider, modal.show = true"/>
             </q-card-actions>
           </q-card>
@@ -44,7 +44,7 @@
           <q-card-section class="relative-position col-12">
             <!--Forms-->
             <q-form autocorrect="off" autocomplete="off" ref="formProviderConfig" @submit="saveProviderConfig()"
-                    @validation-error="$alert.error($tr('ui.message.formInvalid'))">
+                    @validation-error="$alert.error($tr('isite.cms.message.formInvalid'))">
               <!--Fields-->
               <dynamic-field v-for="(field, name) in providerFields" :key="name" :field="field"
                              v-if="!field.isFakeField" v-model="modal.form[field.name || name]"
@@ -59,7 +59,7 @@
           <q-toolbar class="q-pa-md">
             <q-toolbar-title></q-toolbar-title>
             <!--Button Save-->
-            <q-btn icon="fas fa-save" color="positive" rounded unelevated :label="$tr('ui.label.save')"
+            <q-btn icon="fas fa-save" color="positive" rounded unelevated :label="$tr('isite.cms.label.save')"
                    @click="$refs.formProviderConfig.submit()"/>
           </q-toolbar>
 
@@ -160,14 +160,14 @@ export default {
       //Default response [Disabled]
       let response = {
         color: 'red',
-        label: this.$tr('ui.label.disabled')
+        label: this.$tr('isite.cms.label.disabled')
       }
 
       //If prvider is enabled
       if (provider && provider.data && parseInt(provider.data.status))
         response = {
           color: 'green',
-          label: this.$tr('ui.label.enabled')
+          label: this.$tr('isite.cms.label.enabled')
         }
 
       //Response
@@ -196,10 +196,10 @@ export default {
         //Request
         this.$crud.update('apiRoutes.qnotification.providers', providerId, formData).then(response => {
           afterSaveProvider()//Get providers data
-          this.$alert.info({message: this.$tr('ui.message.recordCreated')})//Show message
+          this.$alert.info({message: this.$tr('isite.cms.message.recordCreated')})//Show message
         }).catch(error => {
           this.modal.loading = false
-          this.$alert.error({message: this.$tr('ui.message.recordNoUpdated')})
+          this.$alert.error({message: this.$tr('isite.cms.message.recordNoUpdated')})
         })
       }
       //Create provider
@@ -207,10 +207,10 @@ export default {
         //Request
         this.$crud.create('apiRoutes.qnotification.providers', formData).then(response => {
           afterSaveProvider()//Get providers data
-          this.$alert.info({message: this.$tr('ui.message.recordCreated')})//Show message
+          this.$alert.info({message: this.$tr('isite.cms.message.recordCreated')})//Show message
         }).catch(error => {
           this.modal.loading = false
-          this.$alert.error({message: this.$tr('ui.message.recordNoCreated')})
+          this.$alert.error({message: this.$tr('isite.cms.message.recordNoCreated')})
         })
       }
     }

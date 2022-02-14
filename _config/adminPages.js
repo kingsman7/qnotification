@@ -10,8 +10,8 @@ export default {
     name: 'notification.admin.providers',
     layout: () => import('@imagina/qsite/_layouts/master'),
     page: () => import('@imagina/qnotification/_pages/admin/setting/index'),
-    title: 'qnotification.sidebar.adminConfig.title',
-    headerTitle: 'qnotification.sidebar.adminConfig.headerTitle',
+    title: 'notification.cms.sidebar.adminConfig.title',
+    headerTitle: 'notification.cms.sidebar.adminConfig.headerTitle',
     icon: 'fab fa-stack-exchange',
     authenticated: true,
     subHeader: {

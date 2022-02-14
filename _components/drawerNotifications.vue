@@ -4,7 +4,7 @@
     <!-- ===== Header ===== -->
     <div class="text-subtitle1 row items-center">
       <q-icon name="fas fa-bell" color="primary" size="20px" class="q-mr-sm"/>
-      <label>{{ $tr('ui.label.notification', {capitalize: true}) }}</label>
+      <label>{{ $tr('isite.cms.label.notification', {capitalize: true}) }}</label>
     </div>
     <!--Separator-->
     <q-separator class="q-my-md"/>
@@ -42,7 +42,7 @@
       <!--Actions-->
       <div class="text-center q-py-md" v-if="(this.pagination.page == this.pagination.lastPage) ? false : true">
         <!--Load more notifications-->
-        <q-btn unelevated color="green" rounded no-caps :label="$trp('ui.label.showMore')" @click="getData()"/>
+        <q-btn unelevated color="green" rounded no-caps :label="$trp('isite.cms.label.showMore')" @click="getData()"/>
       </div>
       <!--Inner loading-->
       <inner-loading :visible="loading"/>
@@ -111,7 +111,7 @@ export default {
               message: notificationData.message,
               icon: notificationData.icon,
               actions: [{
-                label: this.$tr('ui.label.ok'),
+                label: this.$tr('isite.cms.label.ok'),
                 color: 'green',
                 handler: () => this.handlerActon(notificationData)
               }],
@@ -146,7 +146,7 @@ export default {
           message: `${response.message.substr(0, 30)}...`,
           icon: 'fas fa-bell',
           actions: [{
-            label: this.$tr('ui.label.show'),
+            label: this.$tr('isite.cms.label.show'),
             color: 'white',
             handler: () => this.$eventBus.$emit('openMasterDrawer', 'notification')
           }],

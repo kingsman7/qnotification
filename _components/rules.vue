@@ -13,8 +13,8 @@
         <!--Header-->
         <q-toolbar class="bg-primary text-white">
           <q-toolbar-title>
-            <label v-if="!modal.item">{{$tr('qnotification.layout.newRule')}}</label>
-            <label v-else>{{$tr('qnotification.layout.updateRule')}} ID: {{modal.item.id}}</label>
+            <label v-if="!modal.item">{{$tr('notification.cms.newRule')}}</label>
+            <label v-else>{{$tr('notification.cms.updateRule')}} ID: {{modal.item.id}}</label>
           </q-toolbar-title>
           <q-btn flat v-close-popup icon="fas fa-times"/>
         </q-toolbar>
@@ -24,7 +24,7 @@
           <!--Forms-->
           <q-form autocorrect="off" autocomplete="off" ref="formRules" class="row"
                   @submit="modal.item ? updateRule() : createRule()"
-                  @validation-error="$alert.error($tr('ui.message.formInvalid'))">
+                  @validation-error="$alert.error($tr('isite.cms.message.formInvalid'))">
             <!--Form fields-->
             <div class="row col-12 q-col-gutter-md">
               <dynamic-field v-for="(field, name) in formFields" :key="name" v-model="form[field.name || name]"
@@ -35,8 +35,8 @@
             <div class="col-12">
               <!--Description-->
               <div class="q-mb-sm">
-                {{$tr('qnotification.layout.label.event')}}
-                <div class="text-caption text-grey-8">{{$tr('qnotification.layout.message.chooseEventCategory')}}</div>
+                {{$tr('notification.cms.label.event')}}
+                <div class="text-caption text-grey-8">{{$tr('notification.cms.message.chooseEventCategory')}}</div>
               </div>
               <!--Entities-->
               <div class="q-gutter-sm q-mb-sm">
@@ -59,8 +59,8 @@
             <div class="col-12">
               <!--Description-->
               <div class="q-mb-sm">
-                {{$trp('qnotification.layout.label.condition')}}
-                <div class="text-caption text-grey-8">{{$tr('qnotification.layout.message.conditions')}}</div>
+                {{$trp('notification.cms.label.condition')}}
+                <div class="text-caption text-grey-8">{{$tr('notification.cms.message.conditions')}}</div>
               </div>
               <!--Fields-->
               <div class="row col-12 q-col-gutter-md">
@@ -81,7 +81,7 @@
             <div class="col-12">
               <!--Description-->
               <div class="q-mb-sm">
-                {{$trp('qnotification.layout.message.settingProviders')}}
+                {{$trp('notification.cms.message.settingProviders')}}
               </div>
               <!--Providers-->
               <div class="q-gutter-sm q-mb-sm">
@@ -104,10 +104,10 @@
           <q-toolbar-title></q-toolbar-title>
           <!--Button Save-->
           <q-btn icon="fas fa-save" color="positive" rounded unelevated
-                 v-if="!modal.item" :label="$tr('ui.label.save')"
+                 v-if="!modal.item" :label="$tr('isite.cms.label.save')"
                  @click="$refs.formRules.submit()"/>
           <!--Button Update-->
-          <q-btn :label="$tr('ui.label.update')" icon="fas fa-pen" color="positive" rounded unelevated
+          <q-btn :label="$tr('isite.cms.label.update')" icon="fas fa-pen" color="positive" rounded unelevated
                  @click="$refs.formRules.submit()" v-else/>
         </q-toolbar>
       </q-card>
@@ -157,19 +157,19 @@
             value: null,
             type: 'input',
             props: {
-              label: `${this.$tr('ui.form.name')}*`,
-              rules: [val => !!val || this.$tr('ui.message.fieldRequired')]
+              label: `${this.$tr('isite.cms.form.name')}*`,
+              rules: [val => !!val || this.$tr('isite.cms.message.fieldRequired')]
             }
           },
           status: {
             value: '1',
             type: 'select',
             props: {
-              label: `${this.$tr('ui.form.status')}*`,
-              rules: [val => !!val || this.$tr('ui.message.fieldRequired')],
+              label: `${this.$tr('isite.cms.form.status')}*`,
+              rules: [val => !!val || this.$tr('isite.cms.message.fieldRequired')],
               options: [
-                {label: this.$tr('ui.label.enabled'), value: '1'},
-                {label: this.$tr('ui.label.disabled'), value: '0'},
+                {label: this.$tr('isite.cms.label.enabled'), value: '1'},
+                {label: this.$tr('isite.cms.label.disabled'), value: '0'},
               ]
             }
           }
