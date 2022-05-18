@@ -50,12 +50,14 @@ export default class echo {
   //Connect laravel echo
   async doConnection() {
     if (process.env.CLIENT && this.keys) {
-      this.echo = new Echo({
-        broadcaster: 'pusher',
-        key: this.keys.pusherAppKey,
-        cluster: this.keys.pusherAppCluster,
-        encrypted: this.keys.pusherAppEncrypted,
-      });
+      if (!window.location.href.includes("localhost")) {
+        this.echo = new Echo({
+          broadcaster: 'pusher',
+          key: this.keys.pusherAppKey,
+          cluster: this.keys.pusherAppCluster,
+          encrypted: this.keys.pusherAppEncrypted,
+        });
+      }
     }
   }
 
