@@ -1,0 +1,83 @@
+{
+  "crudId": "notification-crud-rules",
+  "entityName": "rule",
+  "apiRoute": "/notification/v2/rules",
+  "permission": "",
+  "extraFormFields": "notification.crud-fields.categories",
+  "create": {
+    "title":"setup.layout.newPaymentMethod",
+    "emitEvent": true
+  },
+  "read": {
+    "columns": [
+      {
+        "name": "id",
+        "label": {
+          "isTranslatable": "singular",
+          "value": "isite.cms.form.id"
+        },
+        "field": "id",
+        "align": "left",
+        "style": "width: 50px",
+        "sortable": false
+      },
+      {
+        "name": "name",
+        "label": {
+          "isTranslatable": "singular",
+          "value": "isite.cms.form.name"
+        },
+        "field": "name",
+        "sortable": false,
+        "align": "right"
+      },
+      {
+        "name": "created_at",
+        "label": {
+          "isTranslatable": "singular",
+          "value": "isite.cms.form.createdAt"
+        },
+        "field": "createdAt",
+        "sortable": false,
+        "align": "right",
+        "format":{
+          "type":"date",
+          "includes": {
+            "type":"long"
+          }
+        }
+      },
+      {
+        "name": "updated_at",
+        "label": {
+          "isTranslatable": "singular",
+          "value": "isite.cms.form.updatedAt"
+        },
+        "field": "updatedAt",
+        "sortable": false,
+        "align": "right",
+        "format":{
+          "type":"date",
+          "includes": {
+            "type":"long"
+          }
+        }
+      },
+      {
+        "name": "actions",
+        "label": {
+          "isTranslatable": "singular",
+          "value": "isite.cms.form.actions"
+        },
+        "field": "actions",
+        "sortable": false,
+        "align": "left"
+      }
+    ],
+    "requestParams": {}
+  },
+  "update": {
+    "emitEvent": true
+  },
+  "delete": true
+}

@@ -1,7 +1,14 @@
-<template></template>
+<template>
+  <config-crud ref="configCrud" />
+</template>
 
 <script>
+import configCrud from "@imagina/qcrud/_config/CrudConfig"
+import Json from "@imagina/qnotification/_crud/rules.json"
   export default {
+    components:{
+      configCrud
+    },
     data() {
       return {
         crudId: this.$uid()
@@ -10,7 +17,8 @@
     computed: {
       crudData() {
         return {
-          crudId: this.crudId,
+          ...this.$refs.configCrud.getData(Json),
+          /*crudId: this.crudId,
           entityName: config("main.qnotification.entityNames.rule"),
           apiRoute: 'apiRoutes.qnotification.rules',
           permission: null,
@@ -34,7 +42,7 @@
             ],
           },
           update: {emitEvent: true},
-          delete: true,
+          delete: true,*/
         }
       }
     }
